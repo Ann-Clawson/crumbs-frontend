@@ -1,3 +1,1 @@
-# crumbs-frontend
-
-derp.
+# crumbs
