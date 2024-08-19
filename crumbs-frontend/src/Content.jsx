@@ -1,5 +1,11 @@
 import { Home } from "./Home";
+import SignIn from "./SignIn";
 
 export function Content() {
-  return <Home />;
+  return (
+    <div>
+      <Home />
+      <SignIn />
+    </div>
+  );
 }
