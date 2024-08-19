@@ -11,7 +11,7 @@ html, body {
 }
 
 /* BEGIN HOME */
-.home-page {
+/* .home-page {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,8 +22,8 @@ html, body {
 }
 
 .home-crumbs {
-  padding-top: 40px;
-  font-size: 55px;
+  /* padding-top: 40px; */
+  /* font-size: 55px;
   font-weight: 600;
 }
 
@@ -35,6 +35,39 @@ html, body {
   font-size: 20px;
   font-weight: 400;
   padding-top: 10px;
+} */
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+  margin-top: 10%;
+}
+
+.home-crumbs {
+  margin-top: 20px;
+  font-size: 4vw;
+  font-weight: 600;
+}
+
+.copyright {
+  font-size: 1vw;
+}
+
+.accounting {
+  font-size: 2vw;
+  font-weight: 400;
+  margin-top: 10px;
+}
+
+.home-page img {
+  max-width: 80%;
+  height: auto;
 }
 
 /* END HOME */

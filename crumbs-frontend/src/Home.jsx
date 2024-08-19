@@ -1,4 +1,5 @@
 import caramelChocChip from "./assets/CaramelChocChip_sash-1-1.jpg";
+import SignIn from "./SignIn";
 
 export function Home() {
   return (
@@ -8,6 +9,7 @@ export function Home() {
         Crumbs<span className="copyright"> &copy;</span>
       </h1>
       <h4 className="accounting">Accounting for every piece</h4>
+      <SignIn />
     </div>
   );
 }
