@@ -1,4 +1,5 @@
 import { Home } from "./Home";
+import { Signup } from "./Signup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
@@ -19,6 +20,7 @@ export function Content() {
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </div>
   );
