@@ -1,5 +1,5 @@
 import { Home } from "./Home";
-import { SignUp } from "./SignUp";
+import { SignUp } from "./Signup";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
