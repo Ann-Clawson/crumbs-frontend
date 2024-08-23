@@ -1,10 +1,11 @@
 import { Content } from "./Content";
+import { BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <div>
+    <BrowserRouter>
       <Content />
-    </div>
+    </BrowserRouter>
   );
 }
 
