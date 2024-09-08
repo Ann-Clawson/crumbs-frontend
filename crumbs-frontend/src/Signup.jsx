@@ -17,6 +17,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 function Copyright(props) {
   return (
@@ -34,12 +35,75 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export function SignUp() {
+  const [emailError, setEmailError] = React.useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+
+  const validateInputs = () => {
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+    // const name = document.getElementById("name");
+
+    let isValid = true;
+
+    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+      setEmailError(true);
+      setEmailErrorMessage("Please enter a valid email address.");
+      isValid = false;
+    } else {
+      setEmailError(false);
+      setEmailErrorMessage("");
+    }
+
+    let errorMessage = "";
+
+    if (!password.value || password.value.length < 8 || password.value.length > 20) {
+      errorMessage = "Password must be between 8 and 20 characters long.";
+      isValid = false;
+    } else if (!/\d/.test(password.value)) {
+      errorMessage = "Password must include at least one number.";
+      isValid = false;
+    } else if (!/[!@#$%^&*_?]/.test(password.value)) {
+      errorMessage = "Password must include at least one special character (!@#$%^&*_?).";
+      isValid = false;
+    } else {
+      setPasswordError(false);
+      setPasswordErrorMessage("");
+    }
+
+    if (!isValid) {
+      setPasswordError(true);
+      setPasswordErrorMessage(errorMessage);
+    }
+
+    // if (!password.value || password.value.length < 8 || password.value.length > 20) {
+    //   setPasswordError(true);
+    //   setPasswordErrorMessage("Password must be at between 8 and 20 characters long.");
+    //   isValid = false;
+    // } else {
+    //   setPasswordError(false);
+    //   setPasswordErrorMessage("");
+    // }
+
+    // if (!name.value || name.value.length < 1) {
+    //   setNameError(true);
+    //   setNameErrorMessage("Name is required.");
+    //   isValid = false;
+    // } else {
+    //   setNameError(false);
+    //   setNameErrorMessage("");
+    // }
+
+    return isValid;
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+    const params = new FormData(event.currentTarget);
+    axios.post("http://localhost:5000/register", params).then((response) => {
+      console.log(response.data);
+      // event.target.reset();
     });
   };
 
@@ -63,7 +127,7 @@ export function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
@@ -73,8 +137,8 @@ export function SignUp() {
                   label="First Name"
                   autoFocus
                 />
-              </Grid>
-              <Grid item xs={12} sm={6}>
+              </Grid> */}
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -83,9 +147,19 @@ export function SignUp() {
                   name="lastName"
                   autoComplete="family-name"
                 />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
-                <TextField required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  name="email"
+                  autoComplete="email"
+                  error={emailError}
+                  helperText={emailErrorMessage}
+                  color={passwordError ? "error" : "primary"}
+                />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -96,6 +170,9 @@ export function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  error={passwordError}
+                  helperText={passwordErrorMessage}
+                  color={passwordError ? "error" : "primary"}
                 />
               </Grid>
               {/* <Grid item xs={12}>
@@ -105,7 +182,7 @@ export function SignUp() {
                 />
               </Grid> */}
             </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={validateInputs}>
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
