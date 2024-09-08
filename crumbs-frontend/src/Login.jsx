@@ -32,10 +32,10 @@ const defaultTheme = createTheme();
 export default function LogIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const params = new FormData(event.currentTarget);
     console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+      email: params.get("email"),
+      password: params.get("password"),
     });
   };
 
