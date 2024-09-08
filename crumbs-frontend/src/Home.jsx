@@ -1,5 +1,5 @@
 import caramelChocChip from "./assets/CaramelChocChip_sash-1-1.jpg";
-import SignIn from "./SignIn";
+import SignIn from "./Login";
 
 export function Home() {
   return (

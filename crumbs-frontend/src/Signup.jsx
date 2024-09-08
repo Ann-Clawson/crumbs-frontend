@@ -1,8 +1,3 @@
-// export function Signup() {
-//   return <h1>signup schmingup</h1>;
-// }
-
-// eslint-disable-next-line no-unused-vars
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -76,15 +71,6 @@ export function SignUp() {
       setPasswordError(true);
       setPasswordErrorMessage(errorMessage);
     }
-
-    // if (!password.value || password.value.length < 8 || password.value.length > 20) {
-    //   setPasswordError(true);
-    //   setPasswordErrorMessage("Password must be at between 8 and 20 characters long.");
-    //   isValid = false;
-    // } else {
-    //   setPasswordError(false);
-    //   setPasswordErrorMessage("");
-    // }
 
     // if (!name.value || name.value.length < 1) {
     //   setNameError(true);
