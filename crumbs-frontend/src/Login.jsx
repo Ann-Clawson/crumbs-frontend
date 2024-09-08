@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -30,8 +31,11 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LogIn() {
+  const [errors, setErrors] = useState([]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    setErrors([]);
     const params = new FormData(event.currentTarget);
     console.log({
       email: params.get("email"),
