@@ -161,6 +161,20 @@ export function SignUp() {
                   color={passwordError ? "error" : "primary"}
                 />
               </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password_confirm"
+                  label="Confirm Password"
+                  type="password"
+                  id="password_confirm"
+                  autoComplete="new-password"
+                  error={passwordError}
+                  helperText={passwordErrorMessage}
+                  color={passwordError ? "error" : "primary"}
+                />
+              </Grid>
               {/* <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
