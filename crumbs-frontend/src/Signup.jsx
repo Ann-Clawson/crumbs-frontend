@@ -89,7 +89,7 @@ export function SignUp() {
     const params = new FormData(event.currentTarget);
     axios.post("http://localhost:5000/register", params).then((response) => {
       console.log(response.data);
-      // event.target.reset();
+      event.target.reset();
     });
   };
 

@@ -1,26 +1,28 @@
 import { Home } from "./Home";
 import { SignUp } from "./Signup";
+import { Dashboard } from "./Dashboard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Routes, Route } from "react-router-dom";
+// import { Dashboard } from "@mui/icons-material";
 
 export function Content() {
-  const [user, setUser] = useState({});
-  const getUser = () => {
-    axios.get(`http://localhost:5000/users/1`).then((response) => {
-      setUser(response.data);
+  const [current_user, setCurrentUser] = useState({});
+  const getCurrentUser = () => {
+    axios.get(`http://localhost:5000/users`).then((response) => {
+      setCurrentUser(response.data);
     });
   };
 
-  useEffect(getUser, []);
-  console.log(user);
-  console.log(user.email);
+  useEffect(getCurrentUser, []);
+  console.log(current_user);
 
   return (
     <div>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );
