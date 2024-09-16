@@ -7,7 +7,7 @@ import { Routes, Route } from "react-router-dom";
 // import { Dashboard } from "@mui/icons-material";
 
 export function Content() {
-  const [current_user, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
   const getCurrentUser = () => {
     axios.get(`http://localhost:5000/users`).then((response) => {
       setCurrentUser(response.data);
@@ -15,7 +15,7 @@ export function Content() {
   };
 
   useEffect(getCurrentUser, []);
-  console.log(current_user);
+  console.log(currentUser);
 
   return (
     <div>
