@@ -73,21 +73,30 @@ export function Dashboard() {
   return (
     <div>
       <h1>{current_user.email}</h1>
-      <Box sx={{ height: 400, width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          height: 400,
+          width: "100%",
+        }}
+      >
+        <Box sx={{ width: "50%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 5,
+                },
               },
-            },
-          }}
-          pageSizeOptions={[5]}
-          checkboxSelection
-          disableRowSelectionOnClick
-        />
+            }}
+            pageSizeOptions={[5]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
+        </Box>
       </Box>
     </div>
   );
