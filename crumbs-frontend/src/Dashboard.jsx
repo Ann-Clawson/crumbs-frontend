@@ -2,6 +2,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 // import axios from "axios";
 // import { useState, useEffect } from "react";
 
@@ -46,18 +47,18 @@ const rows = [
 ];
 
 const inventory_rows = [
-  { id: 1, cookieName: "Adventurefuls", qty: 42, dateAdjusted: 14 },
-  { id: 2, cookieName: "Caramel Chocolate Chip", qty: 13, dateAdjusted: 31 },
-  { id: 3, cookieName: "Samoas", qty: 36, dateAdjusted: 31 },
-  { id: 4, cookieName: "Do-si-dos", qty: 14, dateAdjusted: 11 },
-  { id: 5, cookieName: "Girl Scout S'mores", qty: 27, dateAdjusted: null },
-  { id: 6, cookieName: "Lemonades", qty: 53, dateAdjusted: 150 },
-  { id: 7, cookieName: "Lemon-Ups", qty: 16, dateAdjusted: 150 },
-  { id: 8, cookieName: "Tagalongs", qty: 8, dateAdjusted: 150 },
-  { id: 9, cookieName: "Thin Mints", qty: 32, dateAdjusted: 150 },
-  { id: 10, cookieName: "Toast-Yay!", qty: 38, dateAdjusted: 150 },
-  { id: 11, cookieName: "Toffee-tastic", qty: 23, dateAdjusted: 150 },
-  { id: 12, cookieName: "Trefoils", qty: 19, dateAdjusted: 150 },
+  { id: 1, cookieName: "Adventurefuls", qty: 42, adjust: "" },
+  { id: 2, cookieName: "Caramel Chocolate Chip", qty: 13, adjust: "" },
+  { id: 3, cookieName: "Samoas", qty: 36, adjust: "" },
+  { id: 4, cookieName: "Do-si-dos", qty: 14, adjust: "" },
+  { id: 5, cookieName: "Girl Scout S'mores", qty: 27, adjust: "" },
+  { id: 6, cookieName: "Lemonades", qty: 53, adjust: "" },
+  { id: 7, cookieName: "Lemon-Ups", qty: 16, adjust: "" },
+  { id: 8, cookieName: "Tagalongs", qty: 8, adjust: "" },
+  { id: 9, cookieName: "Thin Mints", qty: 32, adjust: "" },
+  { id: 10, cookieName: "Toast-Yay!", qty: 38, adjust: "" },
+  { id: 11, cookieName: "Toffee-tastic", qty: 23, adjust: "" },
+  { id: 12, cookieName: "Trefoils", qty: 19, adjust: "" },
 ];
 
 const inventory_columns = [
@@ -75,21 +76,27 @@ const inventory_columns = [
     editable: true,
   },
   {
-    field: "dateAdjusted",
-    headerName: "Dated Adjusted",
-    type: "number",
-    width: 150,
-    editable: true,
+    field: "adjust",
+    headerName: "Update Totals",
+    // type: "number",
+    width: 185,
+    // editable: true,
+    renderCell: (params) => (
+      <Button
+        variant="contained"
+        color="primary"
+        // onClick={() => handleAdjustClick(params.row.id)}
+      >
+        Click to Adjust
+      </Button>
+    ),
   },
-  // {
-  //   field: "fullName",
-  //   headerName: "Full name",
-  //   description: "This column has a value getter and is not sortable.",
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
-  // },
 ];
+
+// const handleAdjustClick = (id) => {
+//   alert(`Adjust clicked for cookie ID: ${id}`);
+//   // You can perform any operation here, like opening a dialog to adjust quantity
+// };
 
 export function Dashboard() {
   // const [thisUser, setThisUser] = useState({});
