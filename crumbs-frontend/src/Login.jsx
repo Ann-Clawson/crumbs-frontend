@@ -38,12 +38,21 @@ export default function LogIn() {
     event.preventDefault();
     setErrors([]);
     const params = new FormData(event.currentTarget);
-    axios.post("http://localhost:5000/login", params);
-    event.target.reset();
-    window.location.href = "/dashboard";
-    // axios.get("http://localhost:5000/users").then((response) => {
-    //   console.log(response);
-    // });
+
+    axios
+      .post("http://localhost:5000/login", params, { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200) {
+          event.target.reset();
+          window.location.href = "/dashboard";
+        } else {
+          setErrors(["Login failed. Please try again."]);
+        }
+      })
+      .catch((error) => {
+        console.error("Login error: ", error);
+        setErrors(["An error occurred. Please try again."]);
+      });
   };
 
   return (
