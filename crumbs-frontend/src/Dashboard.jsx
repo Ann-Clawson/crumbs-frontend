@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
@@ -42,6 +43,52 @@ const rows = [
   { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
   { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
   { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
+];
+
+const inventory_rows = [
+  { id: 1, cookieName: "Adventurefuls", qty: 42, dateAdjusted: 14 },
+  { id: 2, cookieName: "Caramel Chocolate Chip", qty: 13, dateAdjusted: 31 },
+  { id: 3, cookieName: "Samoas", qty: 36, dateAdjusted: 31 },
+  { id: 4, cookieName: "Do-si-dos", qty: 14, dateAdjusted: 11 },
+  { id: 5, cookieName: "Girl Scout S'mores", qty: 27, dateAdjusted: null },
+  { id: 6, cookieName: "Lemonades", qty: 53, dateAdjusted: 150 },
+  { id: 7, cookieName: "Lemon-Ups", qty: 16, dateAdjusted: 150 },
+  { id: 8, cookieName: "Tagalongs", qty: 8, dateAdjusted: 150 },
+  { id: 9, cookieName: "Thin Mints", qty: 32, dateAdjusted: 150 },
+  { id: 10, cookieName: "Toast-Yay!", qty: 38, dateAdjusted: 150 },
+  { id: 11, cookieName: "Toffee-tastic", qty: 23, dateAdjusted: 150 },
+  { id: 12, cookieName: "Trefoils", qty: 19, dateAdjusted: 150 },
+];
+
+const inventory_columns = [
+  // { field: "id", headerName: "ID", width: 90 },
+  {
+    field: "cookieName",
+    headerName: "Cookie Name",
+    width: 150,
+    editable: true,
+  },
+  {
+    field: "qty",
+    headerName: "Qty",
+    width: 150,
+    editable: true,
+  },
+  {
+    field: "dateAdjusted",
+    headerName: "Dated Adjusted",
+    type: "number",
+    width: 150,
+    editable: true,
+  },
+  // {
+  //   field: "fullName",
+  //   headerName: "Full name",
+  //   description: "This column has a value getter and is not sortable.",
+  //   sortable: false,
+  //   width: 160,
+  //   valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
+  // },
 ];
 
 export function Dashboard() {
@@ -170,8 +217,8 @@ export function Dashboard() {
           >
             <h2>Cookie Inventory</h2>
             <DataGrid
-              rows={rows}
-              columns={columns}
+              rows={inventory_rows}
+              columns={inventory_columns}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -180,7 +227,7 @@ export function Dashboard() {
                 },
               }}
               pageSizeOptions={[5]}
-              checkboxSelection
+              // checkboxSelection
               disableRowSelectionOnClick
             />
           </Box>
