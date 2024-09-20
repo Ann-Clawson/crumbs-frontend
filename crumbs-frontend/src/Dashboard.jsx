@@ -76,12 +76,21 @@ export function Dashboard() {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "flex-end",
-          height: 400,
+          justifyContent: "space-around",
           width: "100%",
+          height: "100vh",
+          padding: "10px",
         }}
       >
-        <Box sx={{ width: "50%" }}>
+        <Box
+          sx={{
+            width: "45%",
+            minHeight: "40vh",
+            maxHeight: "40vh",
+            // flexGrow: 1,
+          }}
+        >
+          <h2>Cookie Calculator</h2>
           <DataGrid
             rows={rows}
             columns={columns}
@@ -96,6 +105,65 @@ export function Dashboard() {
             checkboxSelection
             disableRowSelectionOnClick
           />
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "45%",
+            minHeight: "40vh",
+            maxHeight: "100vh",
+            // flexGrow: 1,
+          }}
+        >
+          <Box
+            sx={{
+              height: "50%",
+              marginBottom: "10%",
+              // minHeight: "20vh",
+              minHeight: "40vh",
+              maxHeight: "40vh",
+            }}
+          >
+            <h2>Currencies</h2>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+            />
+          </Box>
+          <Box
+            sx={{
+              height: "50%",
+              minHeight: "40vh",
+              maxHeight: "40vh",
+            }}
+          >
+            <h2>Cookie Inventory</h2>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+            />
+          </Box>
         </Box>
       </Box>
     </div>
