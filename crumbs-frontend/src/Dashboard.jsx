@@ -42,9 +42,6 @@ const rows = [
   { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
   { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
   { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
 ];
 
 export function Dashboard() {
@@ -72,40 +69,79 @@ export function Dashboard() {
 
   return (
     <div>
-      <h1>{current_user.email}</h1>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-around",
           width: "100%",
           height: "100vh",
-          padding: "10px",
+          padding: "2vh",
         }}
       >
+        {/* LEFT CONTAINER */}
         <Box
           sx={{
+            display: "flex",
+            flexDirection: "column",
             width: "45%",
             minHeight: "40vh",
-            maxHeight: "40vh",
+            maxHeight: "100vh",
+            // display: "flex",
+            // flexDirection: "column",
+            // width: "45%",
+            // // minHeight: "40vh",
+            // maxHeight: "100%",
+
             // flexGrow: 1,
+            // justifyContent: "space-around",
           }}
         >
-          <h2>Cookie Calculator</h2>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 5,
-                },
-              },
+          {/* TOP LEFT */}
+          <Box
+            sx={{
+              // height: "50%",
+              marginBottom: "10%",
+              // minHeight: "20vh",
+              minHeight: "40vh",
+              maxHeight: "40vh",
+              // maxHeight: "100vh",
+              // minHeight: "45vh",
+              // height: "50%",
+              backgroundColor: "#f0f0f0",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
-            pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
-          />
+          >
+            <h1>{current_user.email}</h1>
+          </Box>
+          {/* BOTTOM LEFT */}
+          <Box
+            sx={{
+              height: "50%",
+              minHeight: "40vh",
+              maxHeight: "40vh",
+              // height: "50%",
+            }}
+          >
+            <h2>Orders</h2>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 5,
+                  },
+                },
+              }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+            />
+          </Box>
         </Box>
+        {/* RIGHT CONTAINER */}
         <Box
           sx={{
             display: "flex",
@@ -116,9 +152,10 @@ export function Dashboard() {
             // flexGrow: 1,
           }}
         >
+          {/* TOP RIGHT */}
           <Box
             sx={{
-              height: "50%",
+              // height: "50%",
               marginBottom: "10%",
               // minHeight: "20vh",
               minHeight: "40vh",
@@ -141,9 +178,10 @@ export function Dashboard() {
               disableRowSelectionOnClick
             />
           </Box>
+          {/* BOTTOM RIGHT */}
           <Box
             sx={{
-              height: "50%",
+              // height: "50%",
               minHeight: "40vh",
               maxHeight: "40vh",
             }}
