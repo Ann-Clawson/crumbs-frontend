@@ -66,7 +66,7 @@ const inventory_columns = [
   {
     field: "cookieName",
     headerName: "Cookie Name",
-    width: 150,
+    width: 185,
     editable: true,
   },
   {
