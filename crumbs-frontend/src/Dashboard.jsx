@@ -86,27 +86,14 @@ export function Dashboard() {
             width: "45%",
             minHeight: "40vh",
             maxHeight: "100vh",
-            // display: "flex",
-            // flexDirection: "column",
-            // width: "45%",
-            // // minHeight: "40vh",
-            // maxHeight: "100%",
-
-            // flexGrow: 1,
-            // justifyContent: "space-around",
           }}
         >
           {/* TOP LEFT */}
           <Box
             sx={{
-              // height: "50%",
               marginBottom: "10%",
-              // minHeight: "20vh",
               minHeight: "40vh",
               maxHeight: "40vh",
-              // maxHeight: "100vh",
-              // minHeight: "45vh",
-              // height: "50%",
               backgroundColor: "#f0f0f0",
               display: "flex",
               justifyContent: "center",
@@ -121,7 +108,6 @@ export function Dashboard() {
               height: "50%",
               minHeight: "40vh",
               maxHeight: "40vh",
-              // height: "50%",
             }}
           >
             <h2>Orders</h2>
@@ -149,15 +135,12 @@ export function Dashboard() {
             width: "45%",
             minHeight: "40vh",
             maxHeight: "100vh",
-            // flexGrow: 1,
           }}
         >
           {/* TOP RIGHT */}
           <Box
             sx={{
-              // height: "50%",
               marginBottom: "10%",
-              // minHeight: "20vh",
               minHeight: "40vh",
               maxHeight: "40vh",
             }}
@@ -181,7 +164,6 @@ export function Dashboard() {
           {/* BOTTOM RIGHT */}
           <Box
             sx={{
-              // height: "50%",
               minHeight: "40vh",
               maxHeight: "40vh",
             }}
