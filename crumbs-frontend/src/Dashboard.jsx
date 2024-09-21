@@ -3,8 +3,8 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-// import axios from "axios";
-// import { useState, useEffect } from "react";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
@@ -99,7 +99,23 @@ const inventory_columns = [
 // };
 
 export function Dashboard() {
-  // const [thisUser, setThisUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    // Fetch the current user's info on component mount
+    axios
+      .get("http://localhost:5000/current-user", { withCredentials: true })
+      .then((response) => {
+        if (response.status === 200) {
+          setCurrentUser(response.data); // Set the current user's data
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching current user:", error);
+      });
+  }, []);
+
+  console.log(currentUser);
 
   // const getThisUser = () => {
   //   axios
@@ -114,6 +130,10 @@ export function Dashboard() {
 
   // useEffect(getThisUser, []);
 
+  const handleLogOut = () => {
+    axios.get("http://localhost:5000/logout");
+  };
+
   let current_user = {
     email: "Tina@gmail.com",
     id: 5,
@@ -123,6 +143,16 @@ export function Dashboard() {
 
   return (
     <div>
+      <Button
+        sx={{
+          margin: "10px",
+        }}
+        variant="contained"
+        color="primary"
+        onClick={() => handleLogOut()}
+      >
+        Log Out
+      </Button>
       <Box
         sx={{
           display: "flex",
