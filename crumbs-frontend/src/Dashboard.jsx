@@ -130,8 +130,8 @@ export function Dashboard() {
 
   const inventoryRows = Object.entries(inventory).map(([cookieName, quantity], index) => ({
     id: index, // Assign a unique ID for each row
-    name: cookieName,
-    quantity: quantity,
+    cookieName: cookieName,
+    qty: quantity,
   }));
 
   const inventoryColumns = [
