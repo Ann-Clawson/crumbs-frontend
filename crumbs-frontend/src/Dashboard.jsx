@@ -134,12 +134,12 @@ export function Dashboard() {
     axios.get("http://localhost:5000/logout");
   };
 
-  let current_user = {
-    email: "Tina@gmail.com",
-    id: 5,
-    password: "$2b$12$KbvGaEDGUY9532A70P/tl.FecWC5B34KeowtLDz2O3tpendBwCCW2",
-  };
-  console.log(current_user.email);
+  // let current_user = {
+  //   email: "Tina@gmail.com",
+  //   id: 5,
+  //   password: "$2b$12$KbvGaEDGUY9532A70P/tl.FecWC5B34KeowtLDz2O3tpendBwCCW2",
+  // };
+  // console.log(current_user.email);
 
   return (
     <div>
@@ -184,7 +184,7 @@ export function Dashboard() {
               alignItems: "center",
             }}
           >
-            <h1>{current_user.email}</h1>
+            {/* <h1>{currentUser.email}</h1> */}
           </Box>
           {/* BOTTOM LEFT */}
           <Box
@@ -195,7 +195,7 @@ export function Dashboard() {
             }}
           >
             <h2>Orders</h2>
-            <DataGrid
+            {/* <DataGrid
               rows={rows}
               columns={columns}
               initialState={{
@@ -208,7 +208,7 @@ export function Dashboard() {
               pageSizeOptions={[5]}
               checkboxSelection
               disableRowSelectionOnClick
-            />
+            /> */}
           </Box>
         </Box>
         {/* RIGHT CONTAINER */}
@@ -230,7 +230,7 @@ export function Dashboard() {
             }}
           >
             <h2>Currencies</h2>
-            <DataGrid
+            {/* <DataGrid
               rows={rows}
               columns={columns}
               initialState={{
@@ -243,7 +243,7 @@ export function Dashboard() {
               pageSizeOptions={[5]}
               checkboxSelection
               disableRowSelectionOnClick
-            />
+            /> */}
           </Box>
           {/* BOTTOM RIGHT */}
           <Box
