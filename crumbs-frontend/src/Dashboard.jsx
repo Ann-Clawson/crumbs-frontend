@@ -6,92 +6,60 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-const columns = [
-  { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "firstName",
-    headerName: "First name",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "lastName",
-    headerName: "Last name",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "age",
-    headerName: "Age",
-    type: "number",
-    width: 110,
-    editable: true,
-  },
-  {
-    field: "fullName",
-    headerName: "Full name",
-    description: "This column has a value getter and is not sortable.",
-    sortable: false,
-    width: 160,
-    valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
-  },
-];
+// const columns = [
+//   { field: "id", headerName: "ID", width: 90 },
+//   {
+//     field: "firstName",
+//     headerName: "First name",
+//     width: 150,
+//     editable: true,
+//   },
+//   {
+//     field: "lastName",
+//     headerName: "Last name",
+//     width: 150,
+//     editable: true,
+//   },
+//   {
+//     field: "age",
+//     headerName: "Age",
+//     type: "number",
+//     width: 110,
+//     editable: true,
+//   },
+//   {
+//     field: "fullName",
+//     headerName: "Full name",
+//     description: "This column has a value getter and is not sortable.",
+//     sortable: false,
+//     width: 160,
+//     valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
+//   },
+// ];
 
-const rows = [
-  { id: 1, lastName: "Snow", firstName: "Jon", age: 14 },
-  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 31 },
-  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 31 },
-  { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
-  { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-];
+// const rows = [
+//   { id: 1, lastName: "Snow", firstName: "Jon", age: 14 },
+//   { id: 2, lastName: "Lannister", firstName: "Cersei", age: 31 },
+//   { id: 3, lastName: "Lannister", firstName: "Jaime", age: 31 },
+//   { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
+//   { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
+//   { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
+// ];
 
-const inventory_rows = [
-  { id: 1, cookieName: "Adventurefuls", qty: 42, adjust: "" },
-  { id: 2, cookieName: "Caramel Chocolate Chip", qty: 13, adjust: "" },
-  { id: 3, cookieName: "Samoas", qty: 36, adjust: "" },
-  { id: 4, cookieName: "Do-si-dos", qty: 14, adjust: "" },
-  { id: 5, cookieName: "Girl Scout S'mores", qty: 27, adjust: "" },
-  { id: 6, cookieName: "Lemonades", qty: 53, adjust: "" },
-  { id: 7, cookieName: "Lemon-Ups", qty: 16, adjust: "" },
-  { id: 8, cookieName: "Tagalongs", qty: 8, adjust: "" },
-  { id: 9, cookieName: "Thin Mints", qty: 32, adjust: "" },
-  { id: 10, cookieName: "Toast-Yay!", qty: 38, adjust: "" },
-  { id: 11, cookieName: "Toffee-tastic", qty: 23, adjust: "" },
-  { id: 12, cookieName: "Trefoils", qty: 19, adjust: "" },
-];
-
-const inventory_columns = [
-  // { field: "id", headerName: "ID", width: 90 },
-  {
-    field: "cookieName",
-    headerName: "Cookie Name",
-    width: 185,
-    editable: true,
-  },
-  {
-    field: "qty",
-    headerName: "Qty",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "adjust",
-    headerName: "Update Totals",
-    // type: "number",
-    width: 185,
-    // editable: true,
-    renderCell: (params) => (
-      <Button
-        variant="contained"
-        color="primary"
-        // onClick={() => handleAdjustClick(params.row.id)}
-      >
-        Click to Adjust
-      </Button>
-    ),
-  },
-];
+// const inventoryRows = [
+//   { id: 1, cookieName: "Adventurefuls", qty: 42, adjust: "" },
+//   { id: 2, cookieName: "Caramel Chocolate Chip", qty: 13, adjust: "" },
+//   { id: 3, cookieName: "Samoas", qty: 36, adjust: "" },
+//   { id: 4, cookieName: "Do-si-dos", qty: 14, adjust: "" },
+//   { id: 5, cookieName: "Girl Scout S'mores", qty: 27, adjust: "" },
+//   { id: 6, cookieName: "Lemonades", qty: 53, adjust: "" },
+//   { id: 7, cookieName: "Lemon-Ups", qty: 16, adjust: "" },
+//   { id: 8, cookieName: "Tagalongs", qty: 8, adjust: "" },
+//   { id: 9, cookieName: "Thin Mints", qty: 32, adjust: "" },
+//   { id: 10, cookieName: "Toast-Yay!", qty: 38, adjust: "" },
+//   { id: 11, cookieName: "Toffee-tastic", qty: 23, adjust: "" },
+//   { id: 12, cookieName: "Trefoils", qty: 19, adjust: "" },
+// ];
 
 // const handleAdjustClick = (id) => {
 //   alert(`Adjust clicked for cookie ID: ${id}`);
@@ -100,47 +68,103 @@ const inventory_columns = [
 
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);
+  const [inventory, setInventory] = useState([]);
+  const [loadingInventory, setLoadingInventory] = useState(true);
 
   useEffect(() => {
-    // Fetch the current user's info on component mount
     axios
       .get("http://localhost:5000/current-user", { withCredentials: true })
       .then((response) => {
         if (response.status === 200) {
-          setCurrentUser(response.data); // Set the current user's data
+          setCurrentUser(response.data);
         }
       })
       .catch((error) => {
         console.error("Error fetching current user:", error);
+      })
+      .finally(() => {
+        setLoadingUser(false);
       });
   }, []);
 
+  useEffect(() => {
+    if (currentUser) {
+      axios
+        .get("http://localhost:5000/users/inventory", { withCredentials: true })
+        .then((response) => {
+          if (response.status === 200) {
+            setInventory(response.data);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching inventory:", error);
+        })
+        .finally(() => {
+          setLoadingInventory(false);
+        });
+    }
+  }, [currentUser]);
+
+  if (loadingUser || loadingInventory) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <div className="spinner"></div>
+      </div>
+    );
+  }
+
   console.log(currentUser);
+  console.log(inventory);
 
   const handleLogOut = async () => {
     try {
       await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
-
       localStorage.clear();
       sessionStorage.clear();
-
       window.location.href = "/";
     } catch (error) {
       console.error("Error logging out:", error);
     }
   };
 
-  // const handleLogOut = () => {
-  //   axios.post("http://localhost:5000/logout");
-  //   window.location.href = "/";
-  // };
+  const inventoryRows = Object.entries(inventory).map(([cookieName, quantity], index) => ({
+    id: index, // Assign a unique ID for each row
+    name: cookieName,
+    quantity: quantity,
+  }));
 
-  // let current_user = {
-  //   email: "Tina@gmail.com",
-  //   id: 5,
-  //   password: "$2b$12$KbvGaEDGUY9532A70P/tl.FecWC5B34KeowtLDz2O3tpendBwCCW2",
-  // };
-  // console.log(current_user.email);
+  const inventoryColumns = [
+    // { field: "id", headerName: "ID", width: 90 },
+    {
+      field: "cookieName",
+      headerName: "Cookie Name",
+      width: 185,
+      editable: true,
+    },
+    {
+      field: "qty",
+      headerName: "Qty",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "adjust",
+      headerName: "Update Totals",
+      // type: "number",
+      width: 185,
+      // editable: true,
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          color="primary"
+          // onClick={() => handleAdjustClick(params.row.id)}
+        >
+          Click to Adjust
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <div>
@@ -185,7 +209,7 @@ export function Dashboard() {
               alignItems: "center",
             }}
           >
-            {/* <h1>{currentUser.email}</h1> */}
+            <h1>{currentUser.email}</h1>
           </Box>
           {/* BOTTOM LEFT */}
           <Box
@@ -255,8 +279,8 @@ export function Dashboard() {
           >
             <h2>Cookie Inventory</h2>
             <DataGrid
-              rows={inventory_rows}
-              columns={inventory_columns}
+              rows={inventoryRows}
+              columns={inventoryColumns}
               initialState={{
                 pagination: {
                   paginationModel: {
