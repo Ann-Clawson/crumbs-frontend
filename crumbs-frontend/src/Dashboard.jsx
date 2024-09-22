@@ -117,22 +117,23 @@ export function Dashboard() {
 
   console.log(currentUser);
 
-  // const getThisUser = () => {
-  //   axios
-  //     .get("http://localhost:5000/users", { withCredentials: true })
-  //     .then((usersResponse) => {
-  //       setThisUser(usersResponse.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching user:", error);
-  //     });
-  // };
+  const handleLogOut = async () => {
+    try {
+      await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
 
-  // useEffect(getThisUser, []);
+      localStorage.clear();
+      sessionStorage.clear();
 
-  const handleLogOut = () => {
-    axios.get("http://localhost:5000/logout");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
+
+  // const handleLogOut = () => {
+  //   axios.post("http://localhost:5000/logout");
+  //   window.location.href = "/";
+  // };
 
   // let current_user = {
   //   email: "Tina@gmail.com",
