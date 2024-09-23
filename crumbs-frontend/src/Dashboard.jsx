@@ -94,7 +94,7 @@ export function Dashboard() {
     {
       field: "cookieName",
       headerName: "Cookie Name",
-      width: 185,
+      width: 285,
       editable: true,
     },
     {
@@ -102,21 +102,6 @@ export function Dashboard() {
       headerName: "Qty",
       width: 150,
       editable: true,
-    },
-    {
-      field: "adjust",
-      headerName: "Update Totals",
-      width: 185,
-      // eslint-disable-next-line no-unused-vars
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          color="primary"
-          // onClick={() => handleAdjustClick(params.row.id)}
-        >
-          Click to Adjust
-        </Button>
-      ),
     },
   ];
 
@@ -285,13 +270,12 @@ export function Dashboard() {
                 color="primary"
                 onClick={handleOpen}
               >
-                Add Cookies
+                Add Cookies or Edit Totals
               </Button>
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add Cookies to Inventory</DialogTitle>
                 <DialogContent>
                   <div style={{ display: "flex", alignItems: "center", paddingTop: "10px" }}>
-                    {/* Dropdown to select cookie name */}
                     <Select
                       value={selectedCookie || ""}
                       onChange={(e) => setSelectedCookie(e.target.value)}
@@ -307,8 +291,6 @@ export function Dashboard() {
                         </MenuItem>
                       ))}
                     </Select>
-
-                    {/* Input field for quantity */}
                     <TextField
                       type="number"
                       label="Quantity"
@@ -316,8 +298,6 @@ export function Dashboard() {
                       onChange={(e) => setQuantity(e.target.value)}
                       sx={{ marginRight: "10px", width: "80px" }}
                     />
-
-                    {/* Add button */}
                     <Button variant="contained" color="primary" onClick={handleAddCookie}>
                       Add
                     </Button>
