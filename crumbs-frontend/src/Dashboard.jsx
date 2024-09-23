@@ -6,66 +6,6 @@ import { Button } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 
-// const columns = [
-//   { field: "id", headerName: "ID", width: 90 },
-//   {
-//     field: "firstName",
-//     headerName: "First name",
-//     width: 150,
-//     editable: true,
-//   },
-//   {
-//     field: "lastName",
-//     headerName: "Last name",
-//     width: 150,
-//     editable: true,
-//   },
-//   {
-//     field: "age",
-//     headerName: "Age",
-//     type: "number",
-//     width: 110,
-//     editable: true,
-//   },
-//   {
-//     field: "fullName",
-//     headerName: "Full name",
-//     description: "This column has a value getter and is not sortable.",
-//     sortable: false,
-//     width: 160,
-//     valueGetter: (value, row) => `${row.firstName || ""} ${row.lastName || ""}`,
-//   },
-// ];
-
-// const rows = [
-//   { id: 1, lastName: "Snow", firstName: "Jon", age: 14 },
-//   { id: 2, lastName: "Lannister", firstName: "Cersei", age: 31 },
-//   { id: 3, lastName: "Lannister", firstName: "Jaime", age: 31 },
-//   { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
-//   { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-//   { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-// ];
-
-// const inventoryRows = [
-//   { id: 1, cookieName: "Adventurefuls", qty: 42, adjust: "" },
-//   { id: 2, cookieName: "Caramel Chocolate Chip", qty: 13, adjust: "" },
-//   { id: 3, cookieName: "Samoas", qty: 36, adjust: "" },
-//   { id: 4, cookieName: "Do-si-dos", qty: 14, adjust: "" },
-//   { id: 5, cookieName: "Girl Scout S'mores", qty: 27, adjust: "" },
-//   { id: 6, cookieName: "Lemonades", qty: 53, adjust: "" },
-//   { id: 7, cookieName: "Lemon-Ups", qty: 16, adjust: "" },
-//   { id: 8, cookieName: "Tagalongs", qty: 8, adjust: "" },
-//   { id: 9, cookieName: "Thin Mints", qty: 32, adjust: "" },
-//   { id: 10, cookieName: "Toast-Yay!", qty: 38, adjust: "" },
-//   { id: 11, cookieName: "Toffee-tastic", qty: 23, adjust: "" },
-//   { id: 12, cookieName: "Trefoils", qty: 19, adjust: "" },
-// ];
-
-// const handleAdjustClick = (id) => {
-//   alert(`Adjust clicked for cookie ID: ${id}`);
-//   // You can perform any operation here, like opening a dialog to adjust quantity
-// };
-
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
@@ -129,13 +69,20 @@ export function Dashboard() {
   };
 
   const inventoryRows = Object.entries(inventory).map(([cookieName, quantity], index) => ({
-    id: index, // Assign a unique ID for each row
+    id: index,
     cookieName: cookieName,
     qty: quantity,
   }));
 
+  // const inventoryRows = Object.keys(inventory).length > 0
+  // ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
+  //     id: index,
+  //     cookieName: cookieName,
+  //     qty: quantity,
+  //   }))
+  // : [{ id: 0, cookieName: "please add something", qty: "" }];
+
   const inventoryColumns = [
-    // { field: "id", headerName: "ID", width: 90 },
     {
       field: "cookieName",
       headerName: "Cookie Name",
@@ -151,9 +98,7 @@ export function Dashboard() {
     {
       field: "adjust",
       headerName: "Update Totals",
-      // type: "number",
       width: 185,
-      // editable: true,
       // eslint-disable-next-line no-unused-vars
       renderCell: (params) => (
         <Button
@@ -278,7 +223,19 @@ export function Dashboard() {
               maxHeight: "40vh",
             }}
           >
-            <h2>Cookie Inventory</h2>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2>Cookie Inventory</h2>
+              <Button
+                sx={{
+                  margin: "10px",
+                }}
+                variant="contained"
+                color="primary"
+                onClick={() => handleAddCookies()}
+              >
+                Add Cookies
+              </Button>
+            </div>
             <DataGrid
               rows={inventoryRows}
               columns={inventoryColumns}
@@ -290,7 +247,6 @@ export function Dashboard() {
                 },
               }}
               pageSizeOptions={[5]}
-              // checkboxSelection
               disableRowSelectionOnClick
             />
           </Box>
