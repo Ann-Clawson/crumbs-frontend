@@ -154,6 +154,7 @@ export function Dashboard() {
       // type: "number",
       width: 185,
       // editable: true,
+      // eslint-disable-next-line no-unused-vars
       renderCell: (params) => (
         <Button
           variant="contained"

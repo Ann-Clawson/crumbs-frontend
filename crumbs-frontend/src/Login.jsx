@@ -52,6 +52,7 @@ export default function LogIn() {
       .catch((error) => {
         console.error("Login error: ", error);
         setErrors(["An error occurred. Please try again."]);
+        console.log(errors);
       });
   };
 
