@@ -1,10 +1,22 @@
 // eslint-disable-next-line no-unused-vars
 import * as React from "react";
-import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Select, MenuItem } from "@mui/material";
+import {
+  Button,
+  Modal,
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Select,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -15,6 +27,9 @@ export function Dashboard() {
   const [cookieNames, setCookieNames] = useState([]);
   const [selectedCookie, setSelectedCookie] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [adjustModalOpen, setAdjustModalOpen] = useState(false);
+  const [cookieToAdjust, setCookieToAdjust] = useState(null);
+  const [adjustmentValue, setAdjustmentValue] = useState("");
 
   useEffect(() => {
     axios
@@ -36,6 +51,7 @@ export function Dashboard() {
     if (currentUser) {
       fetchUserInventory();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   const fetchUserInventory = () => {
@@ -64,6 +80,17 @@ export function Dashboard() {
     );
   }
 
+  const fetchCookieNames = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/cookies");
+      const data = response.data;
+      setCookieNames(data.cookies);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching cookie names:", error);
+    }
+  };
+
   const handleLogOut = async () => {
     try {
       await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
@@ -75,36 +102,6 @@ export function Dashboard() {
     }
   };
 
-  // const inventoryRows = Object.entries(inventory).map(([cookieName, quantity], index) => ({
-  //   id: index,
-  //   cookieName: cookieName,
-  //   qty: quantity,
-  // }));
-
-  const inventoryRows =
-    Object.keys(inventory).length > 0
-      ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
-          id: index,
-          cookieName: cookieName,
-          qty: quantity,
-        }))
-      : [{ id: 0, cookieName: "please add something", qty: "" }];
-
-  const inventoryColumns = [
-    {
-      field: "cookieName",
-      headerName: "Cookie Name",
-      width: 285,
-      editable: true,
-    },
-    {
-      field: "qty",
-      headerName: "Qty",
-      width: 150,
-      editable: true,
-    },
-  ];
-
   const handleOpen = () => {
     setOpen(true);
     fetchCookieNames();
@@ -112,17 +109,6 @@ export function Dashboard() {
 
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const fetchCookieNames = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/cookies");
-      const data = response.data;
-      setCookieNames(data.cookies);
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching cookie names:", error);
-    }
   };
 
   const handleAddCookie = async () => {
@@ -148,6 +134,76 @@ export function Dashboard() {
       console.error("Error adding cookie:", error);
     }
   };
+
+  const handleOpenAdjustModal = (cookie) => {
+    setCookieToAdjust(cookie);
+    setAdjustmentValue("");
+    setAdjustModalOpen(true);
+  };
+
+  const handleCloseAdjustModal = () => {
+    setAdjustModalOpen(false);
+    setCookieToAdjust(null);
+  };
+
+  const handleAdjustTotal = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("cookie_name", cookieToAdjust.cookieName);
+      formData.append("adjustment", adjustmentValue);
+
+      const response = await axios.post("http://localhost:5000/users/inventory/adjust", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.status === 200 || response.status === 201) {
+        alert("Quantity adjusted successfully!");
+        fetchUserInventory(); // Ensure this function is declared correctly elsewhere in your code
+        handleCloseAdjustModal();
+      } else {
+        alert("Error adjusting quantity");
+      }
+    } catch (error) {
+      console.error("Error adjusting quantity:", error);
+    }
+  };
+
+  const inventoryRows =
+    Object.keys(inventory).length > 0
+      ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
+          id: index,
+          cookieName: cookieName,
+          qty: quantity,
+        }))
+      : [{ id: 0, cookieName: "Add cookies to start tracking your inventory", qty: "" }];
+
+  const inventoryColumns = [
+    {
+      field: "cookieName",
+      headerName: "Cookie Name",
+      width: 255,
+      editable: true,
+    },
+    {
+      field: "qty",
+      headerName: "Qty",
+      width: 100,
+      editable: true,
+    },
+    {
+      field: "adjust",
+      headerName: "Update Totals",
+      width: 185,
+      renderCell: (params) => (
+        <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
+          Click to Adjust
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <div>
@@ -270,7 +326,7 @@ export function Dashboard() {
                 color="primary"
                 onClick={handleOpen}
               >
-                Add Cookies or Edit Totals
+                Add Cookies
               </Button>
               <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add Cookies to Inventory</DialogTitle>
@@ -323,6 +379,49 @@ export function Dashboard() {
               pageSizeOptions={[5]}
               disableRowSelectionOnClick
             />
+            <Modal open={adjustModalOpen} onClose={handleCloseAdjustModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 400,
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
+                }}
+              >
+                {/* Modal Header with Close Button */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <h3 style={{ margin: 0 }}>{cookieToAdjust?.cookieName}</h3>
+                  <IconButton onClick={handleCloseAdjustModal} size="small">
+                    <CloseIcon />
+                  </IconButton>
+                </div>
+
+                {/* Modal Content */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <TextField
+                    type="number"
+                    label="Adjust Quantity"
+                    value={adjustmentValue}
+                    onChange={(e) => setAdjustmentValue(e.target.value)}
+                    sx={{ marginRight: "10px", width: "100px" }}
+                  />
+                  <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
+                    Click to adjust total
+                  </Button>
+                </div>
+              </Box>
+            </Modal>
           </Box>
         </Box>
       </Box>
