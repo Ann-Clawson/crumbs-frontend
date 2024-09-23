@@ -2,15 +2,19 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Select, MenuItem } from "@mui/material";
 
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
   const [inventory, setInventory] = useState([]);
   const [loadingInventory, setLoadingInventory] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [cookieNames, setCookieNames] = useState([]);
+  const [selectedCookie, setSelectedCookie] = useState("");
+  const [quantity, setQuantity] = useState("");
 
   useEffect(() => {
     axios
@@ -30,6 +34,12 @@ export function Dashboard() {
 
   useEffect(() => {
     if (currentUser) {
+      fetchUserInventory();
+    }
+  }, [currentUser]);
+
+  const fetchUserInventory = () => {
+    if (currentUser) {
       axios
         .get("http://localhost:5000/users/inventory", { withCredentials: true })
         .then((response) => {
@@ -44,7 +54,7 @@ export function Dashboard() {
           setLoadingInventory(false);
         });
     }
-  }, [currentUser]);
+  };
 
   if (loadingUser || loadingInventory) {
     return (
@@ -53,9 +63,6 @@ export function Dashboard() {
       </div>
     );
   }
-
-  console.log(currentUser);
-  console.log(inventory);
 
   const handleLogOut = async () => {
     try {
@@ -68,19 +75,20 @@ export function Dashboard() {
     }
   };
 
-  const inventoryRows = Object.entries(inventory).map(([cookieName, quantity], index) => ({
-    id: index,
-    cookieName: cookieName,
-    qty: quantity,
-  }));
+  // const inventoryRows = Object.entries(inventory).map(([cookieName, quantity], index) => ({
+  //   id: index,
+  //   cookieName: cookieName,
+  //   qty: quantity,
+  // }));
 
-  // const inventoryRows = Object.keys(inventory).length > 0
-  // ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
-  //     id: index,
-  //     cookieName: cookieName,
-  //     qty: quantity,
-  //   }))
-  // : [{ id: 0, cookieName: "please add something", qty: "" }];
+  const inventoryRows =
+    Object.keys(inventory).length > 0
+      ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
+          id: index,
+          cookieName: cookieName,
+          qty: quantity,
+        }))
+      : [{ id: 0, cookieName: "please add something", qty: "" }];
 
   const inventoryColumns = [
     {
@@ -111,6 +119,50 @@ export function Dashboard() {
       ),
     },
   ];
+
+  const handleOpen = () => {
+    setOpen(true);
+    fetchCookieNames();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const fetchCookieNames = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/cookies");
+      const data = response.data;
+      setCookieNames(data.cookies);
+      console.log(data);
+    } catch (error) {
+      console.error("Error fetching cookie names:", error);
+    }
+  };
+
+  const handleAddCookie = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("cookie_name", selectedCookie);
+      formData.append("inventory", quantity);
+
+      const response = await axios.post("http://localhost:5000/users/inventory", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200 || response.status === 201) {
+        alert("Cookie added successfully!");
+        fetchUserInventory();
+        handleClose();
+      } else {
+        alert("Error adding cookie");
+      }
+    } catch (error) {
+      console.error("Error adding cookie:", error);
+    }
+  };
 
   return (
     <div>
@@ -231,10 +283,52 @@ export function Dashboard() {
                 }}
                 variant="contained"
                 color="primary"
-                onClick={() => handleAddCookies()}
+                onClick={handleOpen}
               >
                 Add Cookies
               </Button>
+              <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Add Cookies to Inventory</DialogTitle>
+                <DialogContent>
+                  <div style={{ display: "flex", alignItems: "center", paddingTop: "10px" }}>
+                    {/* Dropdown to select cookie name */}
+                    <Select
+                      value={selectedCookie || ""}
+                      onChange={(e) => setSelectedCookie(e.target.value)}
+                      displayEmpty
+                      sx={{ marginRight: "10px", minWidth: "150px" }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select a cookie
+                      </MenuItem>
+                      {cookieNames.map((cookie, index) => (
+                        <MenuItem key={index} value={cookie.name}>
+                          {cookie.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+
+                    {/* Input field for quantity */}
+                    <TextField
+                      type="number"
+                      label="Quantity"
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                      sx={{ marginRight: "10px", width: "80px" }}
+                    />
+
+                    {/* Add button */}
+                    <Button variant="contained" color="primary" onClick={handleAddCookie}>
+                      Add
+                    </Button>
+                  </div>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="secondary">
+                    Cancel
+                  </Button>
+                </DialogActions>
+              </Dialog>
             </div>
             <DataGrid
               rows={inventoryRows}
