@@ -95,7 +95,7 @@ export default function LogIn() {
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel control={<Checkbox value="remember" color="success" />} label="Remember me" />
+            {/* <FormControlLabel control={<Checkbox value="remember" color="success" />} label="Remember me" /> */}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>
