@@ -87,7 +87,7 @@ export function SignUp() {
       if (response.data === "New user added") {
         // window.location.href = "/";
       }
-      // event.target.reset();
+      event.target.reset();
     });
   };
 

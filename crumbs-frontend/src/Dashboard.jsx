@@ -124,7 +124,7 @@ export function Dashboard() {
         },
       });
       if (response.status === 200 || response.status === 201) {
-        alert("Cookie added!");
+        // alert("Cookie added!");
         fetchUserInventory();
         handleClose();
       } else {
@@ -182,7 +182,6 @@ export function Dashboard() {
       });
 
       if (response.status === 200 || response.status === 201) {
-        // alert("Quantity adjusted successfully!");
         fetchUserInventory();
         handleCloseAdjustModal();
       } else {
@@ -193,6 +192,40 @@ export function Dashboard() {
     }
   };
 
+  // const inventoryRows =
+  //   Object.keys(inventory).length > 0
+  //     ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
+  //         id: index,
+  //         cookieName: cookieName,
+  //         qty: quantity,
+  //       }))
+  //     : [{ id: 0, cookieName: "Add cookies to start tracking your inventory", qty: "" }];
+
+  // const inventoryColumns = [
+  //   {
+  //     field: "cookieName",
+  //     headerName: "Cookie Name",
+  //     width: 255,
+  //     editable: true,
+  //   },
+  //   {
+  //     field: "qty",
+  //     headerName: "Qty",
+  //     width: 100,
+  //     editable: true,
+  //   },
+  //   {
+  //     field: "adjust",
+  //     headerName: "Update Totals",
+  //     width: 185,
+  //     renderCell: (params) => (
+  //       <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
+  //         Click to Adjust
+  //       </Button>
+  //     ),
+  //   },
+  // ];
+
   const inventoryRows =
     Object.keys(inventory).length > 0
       ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
@@ -200,7 +233,7 @@ export function Dashboard() {
           cookieName: cookieName,
           qty: quantity,
         }))
-      : [{ id: 0, cookieName: "Add cookies to start tracking your inventory", qty: "" }];
+      : [];
 
   const inventoryColumns = [
     {
@@ -388,7 +421,7 @@ export function Dashboard() {
                 </DialogActions>
               </Dialog>
             </div>
-            <DataGrid
+            {/* <DataGrid
               rows={inventoryRows}
               columns={inventoryColumns}
               initialState={{
@@ -400,7 +433,28 @@ export function Dashboard() {
               }}
               pageSizeOptions={[5]}
               disableRowSelectionOnClick
-            />
+            /> */}
+            <>
+              {Object.keys(inventory).length > 0 ? (
+                <DataGrid
+                  rows={inventoryRows}
+                  columns={inventoryColumns}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 5,
+                      },
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                  disableRowSelectionOnClick
+                />
+              ) : (
+                <div style={{ textAlign: "center", padding: "20px" }}>
+                  <h3>Let&apos;s dough this!</h3>
+                </div>
+              )}
+            </>
             <Modal open={adjustModalOpen} onClose={handleCloseAdjustModal}>
               <Box
                 sx={{
