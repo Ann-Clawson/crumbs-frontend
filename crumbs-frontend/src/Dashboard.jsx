@@ -148,11 +148,33 @@ export function Dashboard() {
 
   const handleAdjustTotal = async () => {
     try {
+      const inventoryArray = Object.entries(inventory).map(([cookieName, qty]) => ({
+        cookieName,
+        qty,
+      }));
+
+      const currentCookie = inventoryArray.find((item) => item.cookieName === cookieToAdjust.cookieName);
+
+      if (!currentCookie) {
+        alert("Error: Could not find the current inventory for this cookie.");
+        return;
+      }
+
+      const currentInventory = currentCookie.qty;
+      const adjustment = parseInt(adjustmentValue, 10);
+
+      if (isNaN(adjustment)) {
+        alert("Please enter a valid number for adjustment.");
+        return;
+      }
+
+      const newInventory = currentInventory + adjustment;
+
       const formData = new FormData();
       formData.append("cookie_name", cookieToAdjust.cookieName);
-      formData.append("adjustment", adjustmentValue);
+      formData.append("inventory", newInventory);
 
-      const response = await axios.post("http://localhost:5000/users/inventory/adjust", formData, {
+      const response = await axios.post("http://localhost:5000/users/inventory", formData, {
         withCredentials: true,
         headers: {
           "Content-Type": "multipart/form-data",
@@ -160,8 +182,8 @@ export function Dashboard() {
       });
 
       if (response.status === 200 || response.status === 201) {
-        alert("Quantity adjusted successfully!");
-        fetchUserInventory(); // Ensure this function is declared correctly elsewhere in your code
+        // alert("Quantity adjusted successfully!");
+        fetchUserInventory();
         handleCloseAdjustModal();
       } else {
         alert("Error adjusting quantity");
