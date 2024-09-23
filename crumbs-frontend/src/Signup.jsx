@@ -181,32 +181,26 @@ export function SignUp() {
                   color={passwordError ? "error" : "primary"}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={validateInputs}>
               Sign Up
             </Button>
             <Dialog open={openSuccessModal} onClose={handleCloseSuccessModal}>
-              <DialogTitle>Account Created</DialogTitle>
+              <DialogTitle>Your account has been created!</DialogTitle>
               <DialogContent>
                 <Typography>
-                  Your account has been successfully created. Return{" "}
-                  <Link to="/login" onClick={handleCloseSuccessModal}>
+                  Return{" "}
+                  <Link component={RouterLink} to="/" onClick={handleCloseSuccessModal}>
                     here
                   </Link>{" "}
-                  to log in.
+                  to log in and start tracking your dough.
                 </Typography>
               </DialogContent>
-              <DialogActions>
+              {/* <DialogActions>
                 <Button onClick={handleCloseSuccessModal} color="primary" variant="contained">
                   Close
                 </Button>
-              </DialogActions>
+              </DialogActions> */}
             </Dialog>
             <Grid container justifyContent="flex-end">
               <Grid item>
