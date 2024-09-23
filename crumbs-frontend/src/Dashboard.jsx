@@ -270,7 +270,7 @@ export function Dashboard() {
               alignItems: "center",
             }}
           >
-            <h1>{currentUser.email}</h1>
+            <h1>Howdy, {currentUser.email}!</h1>
           </Box>
           {/* BOTTOM LEFT */}
           <Box
@@ -339,7 +339,7 @@ export function Dashboard() {
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2>Cookie Inventory</h2>
+              <h2>Current Inventory</h2>
               <Button
                 sx={{
                   margin: "10px",
