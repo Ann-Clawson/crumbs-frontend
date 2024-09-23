@@ -1,18 +1,17 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import { useState } from "react";
 
 function Copyright(props) {
   return (
@@ -30,10 +29,11 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export function SignUp() {
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
   const validateInputs = () => {
     const email = document.getElementById("email");
@@ -72,14 +72,9 @@ export function SignUp() {
       setPasswordErrorMessage(errorMessage);
     }
 
-    // if (!name.value || name.value.length < 1) {
-    //   setNameError(true);
-    //   setNameErrorMessage("Name is required.");
-    //   isValid = false;
-    // } else {
-    //   setNameError(false);
-    //   setNameErrorMessage("");
-    // }
+    if (isValid) {
+      handleOpenSuccessModal();
+    }
 
     return isValid;
   };
@@ -90,10 +85,18 @@ export function SignUp() {
     axios.post("http://localhost:5000/register", params).then((response) => {
       console.log(response.data);
       if (response.data === "New user added") {
-        window.location.href = "/";
+        // window.location.href = "/";
       }
       // event.target.reset();
     });
+  };
+
+  const handleOpenSuccessModal = () => {
+    setOpenSuccessModal(true);
+  };
+
+  const handleCloseSuccessModal = () => {
+    setOpenSuccessModal(false);
   };
 
   return (
@@ -188,6 +191,23 @@ export function SignUp() {
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={validateInputs}>
               Sign Up
             </Button>
+            <Dialog open={openSuccessModal} onClose={handleCloseSuccessModal}>
+              <DialogTitle>Account Created</DialogTitle>
+              <DialogContent>
+                <Typography>
+                  Your account has been successfully created. Return{" "}
+                  <Link to="/login" onClick={handleCloseSuccessModal}>
+                    here
+                  </Link>{" "}
+                  to log in.
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCloseSuccessModal} color="primary" variant="contained">
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/" variant="body2">
