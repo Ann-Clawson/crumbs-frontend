@@ -124,7 +124,7 @@ export function Dashboard() {
         },
       });
       if (response.status === 200 || response.status === 201) {
-        alert("Cookie added successfully!");
+        alert("Cookie added!");
         fetchUserInventory();
         handleClose();
       } else {
@@ -433,13 +433,13 @@ export function Dashboard() {
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <TextField
                     type="number"
-                    label="Adjust Quantity"
+                    label="Quantity"
                     value={adjustmentValue}
                     onChange={(e) => setAdjustmentValue(e.target.value)}
                     sx={{ marginRight: "10px", width: "100px" }}
                   />
                   <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
-                    Click to adjust total
+                    Adjust total
                   </Button>
                 </div>
               </Box>
