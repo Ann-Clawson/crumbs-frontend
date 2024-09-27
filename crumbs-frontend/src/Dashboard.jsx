@@ -124,7 +124,6 @@ export function Dashboard() {
         },
       });
       if (response.status === 200 || response.status === 201) {
-        // alert("Cookie added!");
         fetchUserInventory();
         handleClose();
       } else {
@@ -263,7 +262,7 @@ export function Dashboard() {
               marginBottom: "10%",
               minHeight: "40vh",
               maxHeight: "40vh",
-              backgroundColor: "#f0f0f0",
+              backgroundColor: "white",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
