@@ -34,11 +34,14 @@ export function SignUp() {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [passwordConfirmationError, setPasswordConfirmationError] = useState(false);
+  const [passwordConfirmationErrorMessage, setPasswordConfirmationErrorMessage] = useState("");
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
   const validateInputs = () => {
     const email = document.getElementById("email");
     const password = document.getElementById("password");
+    const passwordConfirmation = document.getElementById("passwordConfirm");
     // const name = document.getElementById("name");
 
     let isValid = true;
@@ -71,6 +74,19 @@ export function SignUp() {
     if (!isValid) {
       setPasswordError(true);
       setPasswordErrorMessage(errorMessage);
+    }
+
+    if (!passwordConfirmation.value) {
+      setPasswordConfirmationError(true);
+      setPasswordConfirmationErrorMessage("Please confirm your password.");
+      isValid = false;
+    } else if (password.value !== passwordConfirmation.value) {
+      setPasswordConfirmationError(true);
+      setPasswordConfirmationErrorMessage("Passwords do not match.");
+      isValid = false;
+    } else {
+      setPasswordConfirmationError(false);
+      setPasswordConfirmationErrorMessage("");
     }
 
     if (isValid) {
@@ -174,13 +190,13 @@ export function SignUp() {
                   <TextField
                     required
                     fullWidth
-                    name="password_confirm"
+                    name="passwordConfirm"
                     label="Confirm Password"
                     type="password"
-                    id="password_confirm"
+                    id="passwordConfirm"
                     autoComplete="new-password"
-                    error={passwordError}
-                    helperText={passwordErrorMessage}
+                    error={passwordConfirmationError}
+                    helperText={passwordConfirmationErrorMessage}
                     color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
