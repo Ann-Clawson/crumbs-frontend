@@ -374,6 +374,7 @@ export function Dashboard() {
               margin: 0,
               borderRadius: "10px",
               overflow: "hidden",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
