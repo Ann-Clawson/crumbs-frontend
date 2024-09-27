@@ -261,7 +261,7 @@ export function Dashboard() {
   ];
 
   return (
-    <div>
+    <div className="dashboard-background">
       <Button
         sx={{
           margin: "10px",
