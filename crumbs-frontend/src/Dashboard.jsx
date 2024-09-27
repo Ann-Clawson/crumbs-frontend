@@ -424,6 +424,9 @@ export function Dashboard() {
                       borderBottomLeftRadius: "10px",
                       borderBottomRightRadius: "10px",
                     },
+                    "& .MuiDataGrid-columnHeaderTitle": {
+                      fontWeight: "bold",
+                    },
                   }}
                 />
               ) : (
