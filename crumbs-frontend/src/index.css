@@ -80,8 +80,8 @@ html, body {
 }
 
 .dashboard-background {
-    /* height: 100vh;
-    background: linear-gradient(135deg, #85be89 0%, #4d6050 100%); */
+    height: 100vh;
+    background: linear-gradient(135deg, #01ce9e 0%, #005b48 100%);
 }
 
 /* END DASHBOARD */

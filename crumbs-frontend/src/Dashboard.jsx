@@ -278,7 +278,7 @@ export function Dashboard() {
           justifyContent: "space-around",
           width: "100%",
           height: "100vh",
-          padding: "2vh",
+          // padding: "2vh",
         }}
       >
         {/* LEFT CONTAINER */}
