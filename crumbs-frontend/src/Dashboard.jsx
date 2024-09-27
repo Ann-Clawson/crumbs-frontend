@@ -192,40 +192,6 @@ export function Dashboard() {
     }
   };
 
-  // const inventoryRows =
-  //   Object.keys(inventory).length > 0
-  //     ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
-  //         id: index,
-  //         cookieName: cookieName,
-  //         qty: quantity,
-  //       }))
-  //     : [{ id: 0, cookieName: "Add cookies to start tracking your inventory", qty: "" }];
-
-  // const inventoryColumns = [
-  //   {
-  //     field: "cookieName",
-  //     headerName: "Cookie Name",
-  //     width: 255,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "qty",
-  //     headerName: "Qty",
-  //     width: 100,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "adjust",
-  //     headerName: "Update Totals",
-  //     width: 185,
-  //     renderCell: (params) => (
-  //       <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
-  //         Click to Adjust
-  //       </Button>
-  //     ),
-  //   },
-  // ];
-
   const inventoryRows =
     Object.keys(inventory).length > 0
       ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
@@ -301,6 +267,8 @@ export function Dashboard() {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              borderRadius: "10px",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
             }}
           >
             <h1>Howdy, {currentUser.email}!</h1>
