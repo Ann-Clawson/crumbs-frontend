@@ -83,10 +83,17 @@ html, body {
 
 .dashboard-background {
     height: 100vh;
-    background: linear-gradient(135deg, #7cc9b7 0%, #28584d 100%);
+    background: radial-gradient(circle at 40% 60%, 
+              #4f876a 0%,        /* Darker green center */
+              #4f876a 40%,       /* Extend the darker green farther */
+              #75a58e 60%,       /* Intermediate lighter green */
+              #a2d8b8 80%,       /* Lighter green toward the edges */
+              #d6f2e4 100%),     /* Very light green at the farthest corners */
+              linear-gradient(135deg, #cdeee3 0%, #7cc9b7 100%);
+  background-blend-mode: multiply; 
     margin: 0;
     padding: 0;
-}
+}   
 
 .current-inventory {
   padding-left: 8px;
