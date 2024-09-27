@@ -372,12 +372,12 @@ export function Dashboard() {
               backgroundColor: "white",
               opacity: 0.9,
               margin: 0,
-              borderRadius: "10px", // Add rounded corners to the Box
+              borderRadius: "10px",
               overflow: "hidden",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2>Current Inventory</h2>
+              <h2 className="current-inventory">Current Inventory</h2>
               <Button
                 sx={{
                   margin: "10px",

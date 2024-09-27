@@ -88,4 +88,8 @@ html, body {
     padding: 0;
 }
 
+.current-inventory {
+  padding-left: 8px;
+}
+
 /* END DASHBOARD */
