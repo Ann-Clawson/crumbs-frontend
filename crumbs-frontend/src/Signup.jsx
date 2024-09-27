@@ -1,8 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, Button, Typography } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
@@ -100,26 +101,28 @@ export function SignUp() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              {/* <Grid item xs={12} sm={6}>
+    <div className="signup-background">
+      <ThemeProvider theme={defaultTheme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <Box
+            sx={{
+              // marginTop: 8,
+              paddingTop: "50%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Avatar>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+              <Grid container spacing={2}>
+                {/* <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
                   name="firstName"
@@ -130,7 +133,7 @@ export function SignUp() {
                   autoFocus
                 />
               </Grid> */}
-              {/* <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   fullWidth
@@ -140,79 +143,80 @@ export function SignUp() {
                   autoComplete="family-name"
                 />
               </Grid> */}
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                  error={emailError}
-                  helperText={emailErrorMessage}
-                  color={passwordError ? "error" : "primary"}
-                />
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    error={emailError}
+                    helperText={emailErrorMessage}
+                    color={passwordError ? "error" : "primary"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    error={passwordError}
+                    helperText={passwordErrorMessage}
+                    color={passwordError ? "error" : "primary"}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="password_confirm"
+                    label="Confirm Password"
+                    type="password"
+                    id="password_confirm"
+                    autoComplete="new-password"
+                    error={passwordError}
+                    helperText={passwordErrorMessage}
+                    color={passwordError ? "error" : "primary"}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                  error={passwordError}
-                  helperText={passwordErrorMessage}
-                  color={passwordError ? "error" : "primary"}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password_confirm"
-                  label="Confirm Password"
-                  type="password"
-                  id="password_confirm"
-                  autoComplete="new-password"
-                  error={passwordError}
-                  helperText={passwordErrorMessage}
-                  color={passwordError ? "error" : "primary"}
-                />
-              </Grid>
-            </Grid>
-            <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={validateInputs}>
-              Sign Up
-            </Button>
-            <Dialog open={openSuccessModal} onClose={handleCloseSuccessModal}>
-              <DialogTitle>Your account has been created!</DialogTitle>
-              <DialogContent>
-                <Typography>
-                  Return{" "}
-                  <Link component={RouterLink} to="/" onClick={handleCloseSuccessModal}>
-                    here
-                  </Link>{" "}
-                  to log in and start tracking your dough.
-                </Typography>
-              </DialogContent>
-              {/* <DialogActions>
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} onClick={validateInputs}>
+                Sign Up
+              </Button>
+              <Dialog open={openSuccessModal} onClose={handleCloseSuccessModal}>
+                <DialogTitle>Your account has been created!</DialogTitle>
+                <DialogContent>
+                  <Typography>
+                    Return{" "}
+                    <Link component={RouterLink} to="/" onClick={handleCloseSuccessModal}>
+                      here
+                    </Link>{" "}
+                    to log in and start tracking your dough.
+                  </Typography>
+                </DialogContent>
+                {/* <DialogActions>
                 <Button onClick={handleCloseSuccessModal} color="primary" variant="contained">
                   Close
                 </Button>
               </DialogActions> */}
-            </Dialog>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="/" variant="body2">
-                  Already have an account? Sign in
-                </Link>
+              </Dialog>
+              <Grid container justifyContent="flex-end">
+                <Grid item>
+                  <Link href="/" variant="body2">
+                    Already have an account? Sign in
+                  </Link>
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 5 }} />
-      </Container>
-    </ThemeProvider>
+          <Copyright sx={{ mt: 5 }} />
+        </Container>
+      </ThemeProvider>
+    </div>
   );
 }
