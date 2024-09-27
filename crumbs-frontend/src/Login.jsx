@@ -39,6 +39,15 @@ export default function LogIn() {
     setErrors([]);
     const params = new FormData(event.currentTarget);
 
+    const email = params.get("email");
+    params.set("email", email.toLowerCase());
+    const password = params.get("password");
+
+    if (!password || password.trim() === "") {
+      setErrors(["Please enter your password."]);
+      return; // Exit the function to prevent the API call
+    }
+
     axios
       .post("http://localhost:5000/login", params, { withCredentials: true })
       .then((response) => {
@@ -50,9 +59,12 @@ export default function LogIn() {
         }
       })
       .catch((error) => {
+        if (error.response && error.response.data && error.response.data.message) {
+          setErrors([error.response.data.message]);
+        } else {
+          setErrors(["An error occurred. Please try again."]);
+        }
         console.error("Login error: ", error);
-        setErrors(["An error occurred. Please try again."]);
-        console.log(errors);
       });
   };
 
@@ -95,7 +107,15 @@ export default function LogIn() {
               id="password"
               autoComplete="current-password"
             />
-            {/* <FormControlLabel control={<Checkbox value="remember" color="success" />} label="Remember me" /> */}
+            {errors.length > 0 && (
+              <Box sx={{ mt: 2 }}>
+                {errors.map((error, index) => (
+                  <Typography key={index} color="error" variant="body2">
+                    {error}
+                  </Typography>
+                ))}
+              </Box>
+            )}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
               Sign In
             </Button>

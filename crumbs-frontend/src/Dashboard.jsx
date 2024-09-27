@@ -271,7 +271,7 @@ export function Dashboard() {
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
             }}
           >
-            <h1>Howdy, {currentUser.email}!</h1>
+            <h1>Howdy, {currentUser.first_name}!</h1>
           </Box>
           {/* BOTTOM LEFT */}
           <Box
