@@ -369,6 +369,11 @@ export function Dashboard() {
             sx={{
               minHeight: "40vh",
               maxHeight: "40vh",
+              backgroundColor: "white",
+              opacity: 0.9,
+              margin: 0,
+              borderRadius: "10px", // Add rounded corners to the Box
+              overflow: "hidden",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -421,33 +426,36 @@ export function Dashboard() {
                 </DialogActions>
               </Dialog>
             </div>
-            {/* <DataGrid
-              rows={inventoryRows}
-              columns={inventoryColumns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-            /> */}
             <>
               {Object.keys(inventory).length > 0 ? (
                 <DataGrid
                   rows={inventoryRows}
                   columns={inventoryColumns}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 5,
-                      },
+                  pagination={false}
+                  // initialState={{
+                  //   pagination: {
+                  //     paginationModel: {
+                  //       pageSize: 5,
+                  //     },
+                  //   },
+                  // }}
+                  // pageSizeOptions={[5]}
+                  disableRowSelectionOnClick
+                  sx={{
+                    "& .MuiDataGrid-root": {
+                      borderRadius: "0px",
+                    },
+                    "& .MuiDataGrid-columnHeaders": {
+                      borderTopLeftRadius: "10px",
+                      borderTopRightRadius: "10px",
+                    },
+                    "& .MuiDataGrid-footerContainer": {
+                      backgroundColor: "white",
+                      opacity: 0.9,
+                      borderBottomLeftRadius: "10px",
+                      borderBottomRightRadius: "10px",
                     },
                   }}
-                  pageSizeOptions={[5]}
-                  disableRowSelectionOnClick
                 />
               ) : (
                 <div style={{ textAlign: "center", padding: "20px" }}>

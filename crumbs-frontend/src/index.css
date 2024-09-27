@@ -7,7 +7,9 @@
 html, body {
   height: 100%;
   font-family: 'Inter', sans-serif;
-  color: rgba(52, 51, 51)
+  color: rgba(52, 51, 51);
+  margin: 0;
+  padding: 0;
 }
 
 /* BEGIN HOME */
@@ -81,7 +83,9 @@ html, body {
 
 .dashboard-background {
     height: 100vh;
-    background: linear-gradient(135deg, #01ce9e 0%, #005b48 100%);
+    background: linear-gradient(135deg, #7cc9b7 0%, #28584d 100%);
+    margin: 0;
+    padding: 0;
 }
 
 /* END DASHBOARD */
