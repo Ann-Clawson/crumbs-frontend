@@ -84,12 +84,12 @@ html, body {
 .dashboard-background {
     height: 100vh;
     background: radial-gradient(circle at 40% 60%, 
-              #4f876a 0%,        /* Darker green center */
-              #4f876a 30%,       /* Extend the darker green farther */
-              #75a58e 60%,       /* Intermediate lighter green */
-              #a2d8b8 80%,       /* Lighter green toward the edges */
-              #d6f2e4 100%),     /* Very light green at the farthest corners */
-              linear-gradient(135deg, #cdeee3 0%, #7cc9b7 100%);
+              #6ea588 0%,        /* 25% Lighter green center */
+              #6ea588 30%,       /* Extend the lighter green farther */
+              #92c2a9 60%,       /* Intermediate lighter green */
+              #c0ebd5 80%,       /* Lighter green toward the edges */
+              #eaf8f0 100%),     /* Very light green at the farthest corners */
+              linear-gradient(135deg, #e1f6ef 0%, #a2dbc8 100%);
   background-blend-mode: multiply; 
     margin: 0;
     padding: 0;
