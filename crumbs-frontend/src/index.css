@@ -83,9 +83,9 @@ html, body {
 
 .dashboard-background {
     height: 100vh;
-    background: radial-gradient(circle at 40% 60%, 
-              #6ea588 0%,        /* 25% Lighter green center */
-              #6ea588 30%,       /* Extend the lighter green farther */
+    background: radial-gradient(circle at 50% 50%, 
+              #62967a 0%,        /* 25% Lighter green center */
+              #6ea588 35%,       /* Extend the lighter green farther */
               #92c2a9 60%,       /* Intermediate lighter green */
               #c0ebd5 80%,       /* Lighter green toward the edges */
               #eaf8f0 100%),     /* Very light green at the farthest corners */
