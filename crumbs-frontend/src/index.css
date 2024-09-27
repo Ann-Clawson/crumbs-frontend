@@ -50,16 +50,16 @@ html, body {
 /* END HOME */
 
 /* BEGIN SIGN UP */
-.signup-background {
-  /* height: 100%;
+/* .signup-background {
+  height: 100%;
   min-height: 100vh;
   background-image: url('./assets/CaramelChocChip_sash-1-1.jpg');
   background-repeat: no-repeat;
-  background-position: center 100px;
+  background-position: center 150px;
   background-size: 50% 60%;
   background-blend-mode: lighten; 
-  background-color: rgba(255, 255, 255, 0.85);  */
-}
+  background-color: rgba(255, 255, 255, 0.85); 
+} */
 
 /* END SIGN UP */
 
@@ -85,7 +85,7 @@ html, body {
     height: 100vh;
     background: radial-gradient(circle at 40% 60%, 
               #4f876a 0%,        /* Darker green center */
-              #4f876a 40%,       /* Extend the darker green farther */
+              #4f876a 30%,       /* Extend the darker green farther */
               #75a58e 60%,       /* Intermediate lighter green */
               #a2d8b8 80%,       /* Lighter green toward the edges */
               #d6f2e4 100%),     /* Very light green at the farthest corners */
