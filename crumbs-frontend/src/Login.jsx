@@ -7,7 +7,6 @@ import TextField from "@mui/material/TextField";
 // import FormControlLabel from "@mui/material/FormControlLabel";
 // import Checkbox from "@mui/material/Checkbox";
 // import Link from "@mui/material/Link";
-import { Link as MuiLink } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -17,6 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import axios from "axios";
 import { Link as RouterLink } from "react-router-dom";
+import { Link as MuiLink } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -46,8 +46,21 @@ export default function LogIn() {
     params.set("email", email.toLowerCase());
     const password = params.get("password");
 
+    let isValid = true;
+    let validationErrors = [];
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      validationErrors.push("Please enter a valid email address.");
+      isValid = false;
+    }
+
     if (!password || password.trim() === "") {
-      setErrors(["Please enter your password."]);
+      validationErrors.push("Please enter your password.");
+      isValid = false;
+    }
+
+    if (!isValid) {
+      setErrors(validationErrors);
       return; // Exit the function to prevent the API call
     }
 
@@ -73,7 +86,7 @@ export default function LogIn() {
   };
 
   const handleLinkClick = () => {
-    setEmailInput(""); // Clear the email input when navigating to the signup page
+    setEmailInput("");
   };
 
   return (
