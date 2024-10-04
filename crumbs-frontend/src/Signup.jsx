@@ -52,7 +52,6 @@ export function SignUp() {
 
     let isValid = true;
 
-    // First Name validation
     if (!firstName.value || firstName.value.trim() === "") {
       setFirstNameError(true);
       setFirstNameErrorMessage("Please enter your first name.");
@@ -62,7 +61,6 @@ export function SignUp() {
       setFirstNameErrorMessage("");
     }
 
-    // Last Name validation
     if (!lastName.value || lastName.value.trim() === "") {
       setLastNameError(true);
       setLastNameErrorMessage("Please enter your last name.");
@@ -126,9 +124,7 @@ export function SignUp() {
     event.preventDefault();
     const params = new FormData(event.currentTarget);
     axios.post("http://localhost:5000/register", params).then((response) => {
-      console.log(response.data);
       if (response.data === "New user added") {
-        // window.location.href = "/";
         event.target.reset();
       } else {
         setEmailErrorMessage(response.data);
@@ -249,11 +245,6 @@ export function SignUp() {
                     to log in and start tracking your dough.
                   </Typography>
                 </DialogContent>
-                {/* <DialogActions>
-                <Button onClick={handleCloseSuccessModal} color="primary" variant="contained">
-                  Close
-                </Button>
-              </DialogActions> */}
               </Dialog>
               <Grid container justifyContent="flex-end">
                 <Grid item>
