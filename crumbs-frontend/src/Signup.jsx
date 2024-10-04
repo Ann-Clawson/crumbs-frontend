@@ -30,6 +30,11 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export function SignUp() {
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = useState("");
+
+  const [lastNameError, setLastNameError] = useState(false);
+  const [lastNameErrorMessage, setLastNameErrorMessage] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordError, setPasswordError] = useState(false);
@@ -39,12 +44,33 @@ export function SignUp() {
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
 
   const validateInputs = () => {
+    const firstName = document.getElementById("firstName");
+    const lastName = document.getElementById("lastName");
     const email = document.getElementById("email");
     const password = document.getElementById("password");
     const passwordConfirmation = document.getElementById("passwordConfirm");
-    // const name = document.getElementById("name");
 
     let isValid = true;
+
+    // First Name validation
+    if (!firstName.value || firstName.value.trim() === "") {
+      setFirstNameError(true);
+      setFirstNameErrorMessage("Please enter your first name.");
+      isValid = false;
+    } else {
+      setFirstNameError(false);
+      setFirstNameErrorMessage("");
+    }
+
+    // Last Name validation
+    if (!lastName.value || lastName.value.trim() === "") {
+      setLastNameError(true);
+      setLastNameErrorMessage("Please enter your last name.");
+      isValid = false;
+    } else {
+      setLastNameError(false);
+      setLastNameErrorMessage("");
+    }
 
     if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
       setEmailError(true);
@@ -149,6 +175,9 @@ export function SignUp() {
                     id="firstName"
                     label="First Name"
                     autoFocus
+                    error={firstNameError}
+                    helperText={firstNameErrorMessage}
+                    color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -159,6 +188,9 @@ export function SignUp() {
                     label="Last Name"
                     name="last_name"
                     autoComplete="family-name"
+                    error={lastNameError}
+                    helperText={lastNameErrorMessage}
+                    color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
                 <Grid item xs={12}>
