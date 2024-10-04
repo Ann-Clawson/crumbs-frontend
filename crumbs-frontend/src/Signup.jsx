@@ -122,6 +122,11 @@ export function SignUp() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const isValid = validateInputs();
+    if (!isValid) {
+      return;
+    }
     const params = new FormData(event.currentTarget);
     axios.post("http://localhost:5000/register", params).then((response) => {
       if (response.data === "New user added") {
