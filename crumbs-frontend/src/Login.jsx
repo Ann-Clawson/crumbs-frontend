@@ -6,7 +6,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 // import FormControlLabel from "@mui/material/FormControlLabel";
 // import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+// import Link from "@mui/material/Link";
+import { Link as MuiLink } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -15,14 +16,15 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import axios from "axios";
+import { Link as RouterLink } from "react-router-dom";
 
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
+      <MuiLink component={RouterLink} color="inherit" href="https://mui.com/">
         cat lady & rance man
-      </Link>{" "}
+      </MuiLink>{" "}
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -33,6 +35,7 @@ const defaultTheme = createTheme();
 
 export default function LogIn() {
   const [errors, setErrors] = useState([]);
+  const [emailInput, setEmailInput] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -51,6 +54,7 @@ export default function LogIn() {
     axios
       .post("http://localhost:5000/login", params, { withCredentials: true })
       .then((response) => {
+        console.log(response);
         if (response.status === 200) {
           event.target.reset();
           window.location.href = "/dashboard";
@@ -66,6 +70,10 @@ export default function LogIn() {
         }
         console.error("Login error: ", error);
       });
+  };
+
+  const handleLinkClick = () => {
+    setEmailInput(""); // Clear the email input when navigating to the signup page
   };
 
   return (
@@ -96,6 +104,8 @@ export default function LogIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={emailInput} // Use the renamed state variable
+              onChange={(e) => setEmailInput(e.target.value)} // Update the state on input change
             />
             <TextField
               margin="normal"
@@ -121,14 +131,14 @@ export default function LogIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <MuiLink component={RouterLink} to="#" variant="body2">
                   Forgot password?
-                </Link>
+                </MuiLink>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <MuiLink component={RouterLink} to="/signup" variant="body2" onClick={handleLinkClick}>
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </MuiLink>
               </Grid>
             </Grid>
           </Box>
