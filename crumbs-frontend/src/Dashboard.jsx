@@ -85,7 +85,7 @@ export function Dashboard() {
       const response = await axios.get("http://localhost:5000/cookies");
       const data = response.data;
       setCookieNames(data.cookies);
-      console.log(data);
+      // console.log(data);
     } catch (error) {
       console.error("Error fetching cookie names:", error);
     }
@@ -161,6 +161,7 @@ export function Dashboard() {
 
       const currentInventory = currentCookie.qty;
       const adjustment = parseInt(adjustmentValue, 10);
+      // console.log("Adjustment Value:", adjustment);
 
       if (isNaN(adjustment)) {
         alert("Please enter a valid number for adjustment.");
