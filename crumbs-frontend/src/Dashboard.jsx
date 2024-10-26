@@ -3,6 +3,7 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Orders } from "./Orders";
 import {
   Button,
   Modal,
@@ -15,6 +16,7 @@ import {
   Select,
   MenuItem,
   IconButton,
+  CircularProgress,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -30,7 +32,10 @@ export function Dashboard() {
   const [adjustModalOpen, setAdjustModalOpen] = useState(false);
   const [cookieToAdjust, setCookieToAdjust] = useState(null);
   const [adjustmentValue, setAdjustmentValue] = useState("");
+  const [orders, setOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
 
+  // Retrieve Current User
   useEffect(() => {
     axios
       .get("http://localhost:5000/current-user", { withCredentials: true })
@@ -47,6 +52,7 @@ export function Dashboard() {
       });
   }, []);
 
+  // Retrieve Current Users' Inventory
   useEffect(() => {
     if (currentUser) {
       fetchUserInventory();
@@ -74,12 +80,23 @@ export function Dashboard() {
 
   if (loadingUser || loadingInventory) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <div className="spinner"></div>
-      </div>
+      // <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      //   <div className="spinner"></div>
+      // </div>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
     );
   }
 
+  // Add Cookies to Cuurent Inventory Dashboard if unpopulated
   const fetchCookieNames = async () => {
     try {
       const response = await axios.get("http://localhost:5000/cookies");
@@ -87,17 +104,6 @@ export function Dashboard() {
       setCookieNames(data.cookies);
     } catch (error) {
       console.error("Error fetching cookie names:", error);
-    }
-  };
-
-  const handleLogOut = async () => {
-    try {
-      await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
-      localStorage.clear();
-      sessionStorage.clear();
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Error logging out:", error);
     }
   };
 
@@ -133,6 +139,7 @@ export function Dashboard() {
     }
   };
 
+  // Adjust Actual Inventory Manually
   const handleOpenAdjustModal = (cookie) => {
     setCookieToAdjust(cookie);
     setAdjustmentValue("");
@@ -183,6 +190,7 @@ export function Dashboard() {
     }
   };
 
+  // Define Current Inventory DataGrid
   const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
     id: index,
     cookieName: cookieName,
@@ -220,6 +228,17 @@ export function Dashboard() {
       ),
     },
   ];
+
+  const handleLogOut = async () => {
+    try {
+      await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   return (
     <div className="dashboard-background">
