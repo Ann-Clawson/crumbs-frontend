@@ -78,7 +78,34 @@ export function Dashboard() {
     }
   };
 
-  if (loadingUser || loadingInventory) {
+  // Retrieve Current Users' Orders
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserOrders();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser]);
+
+  const fetchUserOrders = () => {
+    if (currentUser) {
+      axios
+        .get("http://localhost:5000/orders", { withCredentials: true })
+        .then((response) => {
+          if (response.status === 200) {
+            setOrders(response.data.orders);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+        })
+        .finally(() => {
+          setLoadingOrders(false);
+        });
+    }
+  };
+
+  // Check if Data is Still Loading
+  if (loadingUser || loadingInventory || loadingOrders) {
     return (
       // <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
       //   <div className="spinner"></div>
@@ -96,7 +123,7 @@ export function Dashboard() {
     );
   }
 
-  // Add Cookies to Cuurent Inventory Dashboard if unpopulated
+  // Add Cookies to Current Inventory Dashboard if unpopulated
   const fetchCookieNames = async () => {
     try {
       const response = await axios.get("http://localhost:5000/cookies");
@@ -295,7 +322,7 @@ export function Dashboard() {
               maxHeight: "40vh",
             }}
           >
-            <h2>Orders</h2>
+            <Orders orders={orders} />
             {/* <DataGrid
               rows={rows}
               columns={columns}

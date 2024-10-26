@@ -3,11 +3,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import { useState } from "react";
 
-export function OrdersDashboard({ orders }) {
+export function Orders({ orders }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Create rows from the orders data
+  // Define Orders DataGrid
   const orderRows = orders.map((order, index) => ({
     id: index,
     customerName: `${order.customer_first_name} ${order.customer_last_name}`,
@@ -17,7 +17,6 @@ export function OrdersDashboard({ orders }) {
     orderId: order.id,
   }));
 
-  // Define columns for the orders DataGrid
   const orderColumns = [
     { field: "customerName", headerName: "Customer Name", width: 200 },
     { field: "orderStatus", headerName: "Order Status", width: 180 },
@@ -35,14 +34,12 @@ export function OrdersDashboard({ orders }) {
     },
   ];
 
-  // Handle open details modal
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     setSelectedOrder(order);
     setOrderDetailsOpen(true);
   };
 
-  // Handle close details modal
   const handleCloseOrderDetails = () => {
     setOrderDetailsOpen(false);
     setSelectedOrder(null);
