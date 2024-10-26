@@ -21,7 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 export function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
-  const [inventory, setInventory] = useState([]);
+  const [inventory, setInventory] = useState({});
   const [loadingInventory, setLoadingInventory] = useState(true);
   const [open, setOpen] = useState(false);
   const [cookieNames, setCookieNames] = useState([]);
@@ -61,6 +61,7 @@ export function Dashboard() {
         .then((response) => {
           if (response.status === 200) {
             setInventory(response.data);
+            console.log(response);
           }
         })
         .catch((error) => {
@@ -400,7 +401,7 @@ export function Dashboard() {
                 <DataGrid
                   rows={inventoryRows}
                   columns={inventoryColumns}
-                  pagination={false}
+                  // pagination={false}
                   // initialState={{
                   //   pagination: {
                   //     paginationModel: {
