@@ -61,7 +61,6 @@ export function Dashboard() {
         .then((response) => {
           if (response.status === 200) {
             setInventory(response.data);
-            console.log(response.data);
           }
         })
         .catch((error) => {
@@ -86,7 +85,6 @@ export function Dashboard() {
       const response = await axios.get("http://localhost:5000/cookies");
       const data = response.data;
       setCookieNames(data.cookies);
-      // console.log(data);
     } catch (error) {
       console.error("Error fetching cookie names:", error);
     }
@@ -193,46 +191,12 @@ export function Dashboard() {
     }
   };
 
-  // const inventoryRows =
-  //   Object.keys(inventory).length > 0
-  //     ? Object.entries(inventory).map((cookieName, index) => ({
-  //         id: index,
-  //         cookieName: cookieName,
-  //         qty: inventory[cookieName.inventory],
-  //       }))
-  //     : [];
-
   const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
     id: index,
     cookieName: cookieName,
     inventory: inventory[cookieName].inventory,
     projectedInventory: inventory[cookieName].projected_inventory,
   }));
-
-  // const inventoryColumns = [
-  //   {
-  //     field: "cookieName",
-  //     headerName: "Cookie Name",
-  //     width: 255,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "qty",
-  //     headerName: "Qty",
-  //     width: 100,
-  //     editable: true,
-  //   },
-  //   {
-  //     field: "adjust",
-  //     headerName: "Update Totals",
-  //     width: 185,
-  //     renderCell: (params) => (
-  //       <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
-  //         Click to Adjust
-  //       </Button>
-  //     ),
-  //   },
-  // ];
 
   const inventoryColumns = [
     {
