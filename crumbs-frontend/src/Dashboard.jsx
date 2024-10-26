@@ -146,20 +146,23 @@ export function Dashboard() {
 
   const handleAdjustTotal = async () => {
     try {
-      const inventoryArray = Object.entries(inventory).map(([cookieName, qty]) => ({
-        cookieName,
-        qty,
-      }));
+      // const inventoryArray = Object.entries(inventory).map(([cookieName, qty]) => ({
+      //   cookieName,
+      //   qty,
+      // }));
 
-      const currentCookie = inventoryArray.find((item) => item.cookieName === cookieToAdjust.cookieName);
+      // const currentCookie = inventoryArray.find((item) => item.cookieName === cookieToAdjust.cookieName);
 
-      if (!currentCookie) {
-        alert("Error: Could not find the current inventory for this cookie.");
-        return;
-      }
+      // if (!currentCookie) {
+      //   alert("Error: Could not find the current inventory for this cookie.");
+      //   return;
+      // }
 
-      const currentInventory = currentCookie.qty;
+      const currentInventory = parseInt(inventory[cookieToAdjust.cookieName].inventory, 10);
       const adjustment = parseInt(adjustmentValue, 10);
+
+      // const currentInventory = currentCookie.qty;
+      // const adjustment = parseInt(adjustmentValue, 10);
       // console.log("Adjustment Value:", adjustment);
 
       if (isNaN(adjustment)) {
@@ -168,6 +171,11 @@ export function Dashboard() {
       }
 
       const newInventory = currentInventory + adjustment;
+
+      if (newInventory < 0) {
+        alert("Error: Inventory cannot be negative.");
+        return;
+      }
 
       const formData = new FormData();
       formData.append("cookie_name", cookieToAdjust.cookieName);
