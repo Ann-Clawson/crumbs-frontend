@@ -61,7 +61,7 @@ export function Dashboard() {
         .then((response) => {
           if (response.status === 200) {
             setInventory(response.data);
-            console.log(response);
+            console.log(response.data);
           }
         })
         .catch((error) => {
@@ -193,35 +193,73 @@ export function Dashboard() {
     }
   };
 
-  const inventoryRows =
-    Object.keys(inventory).length > 0
-      ? Object.entries(inventory).map(([cookieName, quantity], index) => ({
-          id: index,
-          cookieName: cookieName,
-          qty: quantity,
-        }))
-      : [];
+  // const inventoryRows =
+  //   Object.keys(inventory).length > 0
+  //     ? Object.entries(inventory).map((cookieName, index) => ({
+  //         id: index,
+  //         cookieName: cookieName,
+  //         qty: inventory[cookieName.inventory],
+  //       }))
+  //     : [];
+
+  const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
+    id: index,
+    cookieName: cookieName,
+    inventory: inventory[cookieName].inventory,
+    projectedInventory: inventory[cookieName].projected_inventory,
+  }));
+
+  // const inventoryColumns = [
+  //   {
+  //     field: "cookieName",
+  //     headerName: "Cookie Name",
+  //     width: 255,
+  //     editable: true,
+  //   },
+  //   {
+  //     field: "qty",
+  //     headerName: "Qty",
+  //     width: 100,
+  //     editable: true,
+  //   },
+  //   {
+  //     field: "adjust",
+  //     headerName: "Update Totals",
+  //     width: 185,
+  //     renderCell: (params) => (
+  //       <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
+  //         Click to Adjust
+  //       </Button>
+  //     ),
+  //   },
+  // ];
 
   const inventoryColumns = [
     {
       field: "cookieName",
       headerName: "Cookie Name",
-      width: 255,
-      editable: true,
+      width: 200,
+      editable: false,
     },
     {
-      field: "qty",
-      headerName: "Qty",
+      field: "inventory",
+      headerName: "Actual",
       width: 100,
-      editable: true,
+      editable: false,
+    },
+    {
+      field: "projectedInventory",
+      headerName: "Projected",
+      width: 100,
+      editable: false,
     },
     {
       field: "adjust",
-      headerName: "Update Totals",
-      width: 185,
+      headerName: "Update Actual",
+      width: 180,
       renderCell: (params) => (
         <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
-          Click to Adjust
+          Adjust
         </Button>
       ),
     },
@@ -474,7 +512,7 @@ export function Dashboard() {
                     sx={{ marginRight: "10px", width: "100px" }}
                   />
                   <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
-                    Adjust total
+                    Adjust Actual Total
                   </Button>
                 </div>
               </Box>
