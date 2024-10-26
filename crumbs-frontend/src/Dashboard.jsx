@@ -146,24 +146,8 @@ export function Dashboard() {
 
   const handleAdjustTotal = async () => {
     try {
-      // const inventoryArray = Object.entries(inventory).map(([cookieName, qty]) => ({
-      //   cookieName,
-      //   qty,
-      // }));
-
-      // const currentCookie = inventoryArray.find((item) => item.cookieName === cookieToAdjust.cookieName);
-
-      // if (!currentCookie) {
-      //   alert("Error: Could not find the current inventory for this cookie.");
-      //   return;
-      // }
-
       const currentInventory = parseInt(inventory[cookieToAdjust.cookieName].inventory, 10);
       const adjustment = parseInt(adjustmentValue, 10);
-
-      // const currentInventory = currentCookie.qty;
-      // const adjustment = parseInt(adjustmentValue, 10);
-      // console.log("Adjustment Value:", adjustment);
 
       if (isNaN(adjustment)) {
         alert("Please enter a valid number for adjustment.");
