@@ -12,7 +12,8 @@ export function Orders({ orders }) {
   // Define Orders DataGrid
   const orderRows = orders.map((order, index) => ({
     id: index,
-    customerName: `${order.customer_first_name} ${order.customer_last_name}`,
+    firstName: `${order.customer_first_name}`,
+    lastName: `${order.customer_last_name}`,
     orderStatus: order.order_status,
     paymentStatus: order.payment_status,
     totalCost: order.total_cost,
@@ -20,7 +21,8 @@ export function Orders({ orders }) {
   }));
 
   const orderColumns = [
-    { field: "customerName", headerName: "Customer Name", width: 200 },
+    { field: "firstName", headerName: "First Name", width: 125 },
+    { field: "lastName", headerName: "Last  Name", width: 125 },
     { field: "orderStatus", headerName: "Order Status", width: 180 },
     { field: "paymentStatus", headerName: "Payment Status", width: 180 },
     { field: "totalCost", headerName: "Total", width: 130 },
@@ -49,11 +51,6 @@ export function Orders({ orders }) {
 
   return (
     <Box
-      // sx={{
-      //   height: "50%",
-      //   minHeight: "40vh",
-      //   maxHeight: "40vh",
-      // }}
       sx={{
         minHeight: "40vh",
         maxHeight: "40vh",
@@ -89,8 +86,6 @@ export function Orders({ orders }) {
           },
         }}
         pageSizeOptions={[5]}
-        // checkboxSelection
-        // disableRowSelectionOnClick
         sx={{
           "& .MuiDataGrid-root": {
             borderRadius: "0px",

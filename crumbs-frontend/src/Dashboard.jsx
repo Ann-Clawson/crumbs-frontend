@@ -441,7 +441,6 @@ export function Dashboard() {
                 <DataGrid
                   rows={inventoryRows}
                   columns={inventoryColumns}
-                  // disableRowSelectionOnClick
                   sx={{
                     "& .MuiDataGrid-root": {
                       borderRadius: "0px",
