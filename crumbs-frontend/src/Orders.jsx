@@ -47,13 +47,35 @@ export function Orders({ orders }) {
 
   return (
     <Box
+      // sx={{
+      //   height: "50%",
+      //   minHeight: "40vh",
+      //   maxHeight: "40vh",
+      // }}
       sx={{
-        height: "50%",
         minHeight: "40vh",
         maxHeight: "40vh",
+        backgroundColor: "white",
+        opacity: 0.9,
+        margin: 0,
+        borderRadius: "10px",
+        overflow: "hidden",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
       }}
     >
-      <h2>Orders</h2>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h2 className="current-inventory">Orders</h2>
+        <Button
+          sx={{
+            margin: "10px",
+            visibility: "hidden",
+          }}
+          variant="contained"
+          color="primary"
+        >
+          Add Cookies
+        </Button>
+      </div>
       <DataGrid
         rows={orderRows}
         columns={orderColumns}
@@ -67,6 +89,24 @@ export function Orders({ orders }) {
         pageSizeOptions={[5]}
         checkboxSelection
         disableRowSelectionOnClick
+        sx={{
+          "& .MuiDataGrid-root": {
+            borderRadius: "0px",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            borderTopLeftRadius: "10px",
+            borderTopRightRadius: "10px",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            backgroundColor: "white",
+            opacity: 0.9,
+            borderBottomLeftRadius: "10px",
+            borderBottomRightRadius: "10px",
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: "bold",
+          },
+        }}
       />
 
       {/* Dialog to show order details */}

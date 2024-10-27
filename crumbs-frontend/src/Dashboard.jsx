@@ -315,15 +315,15 @@ export function Dashboard() {
             <h1>Howdy, {currentUser.first_name}!</h1>
           </Box>
           {/* BOTTOM LEFT */}
-          <Box
+          {/* <Box
             sx={{
               height: "50%",
               minHeight: "40vh",
               maxHeight: "40vh",
             }}
-          >
-            <Orders orders={orders} />
-            {/* <DataGrid
+          > */}
+          <Orders orders={orders} />
+          {/* <DataGrid
               rows={rows}
               columns={columns}
               initialState={{
@@ -337,7 +337,7 @@ export function Dashboard() {
               checkboxSelection
               disableRowSelectionOnClick
             /> */}
-          </Box>
+          {/* </Box> */}
         </Box>
         {/* RIGHT CONTAINER */}
         <Box
