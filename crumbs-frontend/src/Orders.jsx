@@ -2,12 +2,14 @@
 // eslint-disable-next-line no-unused-vars
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
 
 export function Orders({ orders }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState("");
 
   // Define Orders DataGrid
   const orderRows = orders.map((order, index) => ({
@@ -41,12 +43,22 @@ export function Orders({ orders }) {
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     setSelectedOrder(order);
+    setPaymentStatus(order.payment_status);
     setOrderDetailsOpen(true);
   };
 
   const handleCloseOrderDetails = () => {
     setOrderDetailsOpen(false);
     setSelectedOrder(null);
+    setIsEditing(false);
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handlePaymentStatusChange = (event) => {
+    setPaymentStatus(event.target.value);
   };
 
   return (
@@ -110,13 +122,30 @@ export function Orders({ orders }) {
       {selectedOrder && (
         <Dialog open={orderDetailsOpen} onClose={handleCloseOrderDetails}>
           <DialogTitle>
-            Order Details for {selectedOrder.customer_first_name} {selectedOrder.customer_last_name}
+            Order Details for{" "}
+            <strong>
+              {selectedOrder.customer_first_name} {selectedOrder.customer_last_name}
+            </strong>
           </DialogTitle>
           <DialogContent>
             <h4>Order Status: {selectedOrder.order_status}</h4>
-            <h4>Payment Status: {selectedOrder.payment_status}</h4>
+            {/* <h4>Payment Status: {selectedOrder.payment_status}</h4> */}
+            {isEditing ? (
+              <>
+                <h4>Payment Status:</h4>
+                <Select value={paymentStatus} onChange={handlePaymentStatusChange} fullWidth>
+                  <MenuItem value="Unconfirmed">Unconfirmed</MenuItem>
+                  <MenuItem value="Complete">Complete</MenuItem>
+                  <MenuItem value="Incomplete">Incomplete</MenuItem>
+                  <MenuItem value="Invalid">Invalid</MenuItem>
+                </Select>
+              </>
+            ) : (
+              <h4>Payment Status: {selectedOrder.payment_status}</h4>
+            )}
             <h4>Delivery Status: {selectedOrder.delivery_status}</h4>
             <h4>Total Cost: ${selectedOrder.total_cost.toFixed(2)}</h4>
+            <h4>Payment Method: {selectedOrder.payment_type}</h4>
             <h4>Order Cookies:</h4>
             <ul>
               {selectedOrder.order_cookies.map((cookie, index) => (
@@ -127,6 +156,11 @@ export function Orders({ orders }) {
             </ul>
           </DialogContent>
           <DialogActions>
+            {!isEditing && (
+              <Button onClick={handleEditClick} color="primary">
+                Edit Order
+              </Button>
+            )}
             <Button onClick={handleCloseOrderDetails} color="secondary">
               Close
             </Button>

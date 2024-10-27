@@ -103,13 +103,11 @@ export function Dashboard() {
         });
     }
   };
+  console.log(orders);
 
   // Check if Data is Still Loading
   if (loadingUser || loadingInventory || loadingOrders) {
     return (
-      // <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-      //   <div className="spinner"></div>
-      // </div>
       <Box
         sx={{
           display: "flex",
