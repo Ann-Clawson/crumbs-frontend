@@ -134,10 +134,9 @@ export function Orders({ orders }) {
               <>
                 <h4>Payment Status:</h4>
                 <Select value={paymentStatus} onChange={handlePaymentStatusChange} fullWidth>
-                  <MenuItem value="Unconfirmed">Unconfirmed</MenuItem>
-                  <MenuItem value="Complete">Complete</MenuItem>
-                  <MenuItem value="Incomplete">Incomplete</MenuItem>
-                  <MenuItem value="Invalid">Invalid</MenuItem>
+                  {/* <MenuItem value="Unconfirmed">Unconfirmed</MenuItem> */}
+                  <MenuItem value="Complete">Paid</MenuItem>
+                  <MenuItem value="Incomplete">Not Paid</MenuItem>
                 </Select>
               </>
             ) : (
