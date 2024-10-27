@@ -16,7 +16,7 @@ export function Orders({ orders }) {
     lastName: `${order.customer_last_name}`,
     orderStatus: order.order_status,
     paymentStatus: order.payment_status,
-    totalCost: order.total_cost,
+    totalCost: `$${order.total_cost.toFixed(2)}`,
     orderId: order.id,
   }));
 
