@@ -441,16 +441,7 @@ export function Dashboard() {
                 <DataGrid
                   rows={inventoryRows}
                   columns={inventoryColumns}
-                  // pagination={false}
-                  // initialState={{
-                  //   pagination: {
-                  //     paginationModel: {
-                  //       pageSize: 5,
-                  //     },
-                  //   },
-                  // }}
-                  // pageSizeOptions={[5]}
-                  disableRowSelectionOnClick
+                  // disableRowSelectionOnClick
                   sx={{
                     "& .MuiDataGrid-root": {
                       borderRadius: "0px",

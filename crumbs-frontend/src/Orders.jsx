@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+// eslint-disable-next-line no-unused-vars
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
@@ -21,7 +23,7 @@ export function Orders({ orders }) {
     { field: "customerName", headerName: "Customer Name", width: 200 },
     { field: "orderStatus", headerName: "Order Status", width: 180 },
     { field: "paymentStatus", headerName: "Payment Status", width: 180 },
-    { field: "totalCost", headerName: "Total Cost", width: 130 },
+    { field: "totalCost", headerName: "Total", width: 130 },
     {
       field: "viewDetails",
       headerName: "View Details",
@@ -87,8 +89,8 @@ export function Orders({ orders }) {
           },
         }}
         pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
+        // checkboxSelection
+        // disableRowSelectionOnClick
         sx={{
           "& .MuiDataGrid-root": {
             borderRadius: "0px",
