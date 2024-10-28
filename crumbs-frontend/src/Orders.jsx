@@ -4,6 +4,7 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select } from "@mui/material";
 import { useState } from "react";
+import axios from "axios";
 
 export function Orders({ orders }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
@@ -61,6 +62,22 @@ export function Orders({ orders }) {
     setPaymentStatus(event.target.value);
   };
 
+  const handleSaveChanges = async () => {
+    if (!selectedOrder) return;
+
+    try {
+      const response = await axios.patch(`/orders/${selectedOrder.id}`, {
+        payment_id: paymentStatus,
+      });
+
+      // Update the order details with the response data
+      setSelectedOrder(response.data);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Failed to update order:", error);
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -70,7 +87,7 @@ export function Orders({ orders }) {
         opacity: 0.9,
         margin: 0,
         borderRadius: "10px",
-        overflow: "hidden",
+        overflow: "auto",
         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
       }}
     >
@@ -98,6 +115,7 @@ export function Orders({ orders }) {
           },
         }}
         pageSizeOptions={[5]}
+        checkboxSelection={false}
         sx={{
           "& .MuiDataGrid-root": {
             borderRadius: "0px",
@@ -134,7 +152,7 @@ export function Orders({ orders }) {
               <>
                 <h4>Payment Status:</h4>
                 <Select value={paymentStatus} onChange={handlePaymentStatusChange} fullWidth>
-                  {/* <MenuItem value="Unconfirmed">Unconfirmed</MenuItem> */}
+                  <MenuItem value="Unconfirmed">Unconfirmed</MenuItem>
                   <MenuItem value="Complete">Paid</MenuItem>
                   <MenuItem value="Incomplete">Not Paid</MenuItem>
                 </Select>
@@ -155,7 +173,11 @@ export function Orders({ orders }) {
             </ul>
           </DialogContent>
           <DialogActions>
-            {!isEditing && (
+            {isEditing ? (
+              <Button onClick={handleSaveChanges} color="primary">
+                Save Changes
+              </Button>
+            ) : (
               <Button onClick={handleEditClick} color="primary">
                 Edit Order
               </Button>
