@@ -3,7 +3,7 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export function Orders({ orders }) {
@@ -12,7 +12,6 @@ export function Orders({ orders }) {
   const [isEditing, setIsEditing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
 
-  // Define Orders DataGrid
   const orderRows = orders.map((order, index) => ({
     id: index,
     firstName: `${order.customer_first_name}`,
@@ -41,12 +40,52 @@ export function Orders({ orders }) {
     },
   ];
 
+  const convertStatusToNumber = (status) => {
+    switch (status) {
+      case "Unconfirmed":
+        return 0;
+      case "Complete":
+        return 1;
+      case "Incomplete":
+        return 2;
+      case "Invalid":
+        return 3;
+      default:
+        return "";
+    }
+  };
+
+  const convertNumberToStatusKey = (number) => {
+    switch (number) {
+      case 0:
+        return "PAYMENT_UNCONFIRMED";
+      case 1:
+        return "PAYMENT_COMPLETE";
+      case 2:
+        return "PAYMENT_INCOMPLETE";
+      case 3:
+        return "PAYMENT_INVALID";
+      default:
+        return "";
+    }
+  };
+
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
-    setSelectedOrder(order);
-    setPaymentStatus(order.payment_status);
-    setOrderDetailsOpen(true);
+    if (order) {
+      setSelectedOrder(order);
+      setPaymentStatus(
+        typeof order.payment_status === "string" ? convertStatusToNumber(order.payment_status) : order.payment_status
+      );
+      setOrderDetailsOpen(true);
+    }
   };
+
+  useEffect(() => {
+    if (selectedOrder) {
+      console.log("Selected Order:", selectedOrder);
+    }
+  }, [selectedOrder]);
 
   const handleCloseOrderDetails = () => {
     setOrderDetailsOpen(false);
@@ -59,18 +98,24 @@ export function Orders({ orders }) {
   };
 
   const handlePaymentStatusChange = (event) => {
-    setPaymentStatus(event.target.value);
+    const newValue = event.target.value;
+    setPaymentStatus(newValue);
+    console.log("Payment Status Changed to:", newValue);
   };
 
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
 
     try {
-      const response = await axios.patch(`/orders/${selectedOrder.id}`, {
-        payment_id: paymentStatus,
-      });
+      const updatedPaymentStatus = convertNumberToStatusKey(paymentStatus);
+      console.log("Saving Payment Status:", updatedPaymentStatus);
 
-      // Update the order details with the response data
+      const response = await axios.patch(
+        `http://localhost:5000/orders/${selectedOrder.id}`,
+        { payment_status: updatedPaymentStatus },
+        { withCredentials: true }
+      );
+
       setSelectedOrder(response.data);
       setIsEditing(false);
     } catch (error) {
@@ -147,14 +192,13 @@ export function Orders({ orders }) {
           </DialogTitle>
           <DialogContent>
             <h4>Order Status: {selectedOrder.order_status}</h4>
-            {/* <h4>Payment Status: {selectedOrder.payment_status}</h4> */}
             {isEditing ? (
               <>
                 <h4>Payment Status:</h4>
                 <Select value={paymentStatus} onChange={handlePaymentStatusChange} fullWidth>
-                  <MenuItem value="Unconfirmed">Unconfirmed</MenuItem>
-                  <MenuItem value="Complete">Paid</MenuItem>
-                  <MenuItem value="Incomplete">Not Paid</MenuItem>
+                  <MenuItem value={0}>Unconfirmed</MenuItem>
+                  <MenuItem value={1}>Paid</MenuItem>
+                  <MenuItem value={2}>Not Paid</MenuItem>
                 </Select>
               </>
             ) : (
