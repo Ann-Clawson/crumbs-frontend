@@ -40,43 +40,11 @@ export function Orders({ orders }) {
     },
   ];
 
-  const convertStatusToNumber = (status) => {
-    switch (status) {
-      case "Unconfirmed":
-        return 0;
-      case "Complete":
-        return 1;
-      case "Incomplete":
-        return 2;
-      case "Invalid":
-        return 3;
-      default:
-        return "";
-    }
-  };
-
-  const convertNumberToStatusKey = (number) => {
-    switch (number) {
-      case 0:
-        return "PAYMENT_UNCONFIRMED";
-      case 1:
-        return "PAYMENT_COMPLETE";
-      case 2:
-        return "PAYMENT_INCOMPLETE";
-      case 3:
-        return "PAYMENT_INVALID";
-      default:
-        return "";
-    }
-  };
-
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     if (order) {
       setSelectedOrder(order);
-      setPaymentStatus(
-        typeof order.payment_status === "string" ? convertStatusToNumber(order.payment_status) : order.payment_status
-      );
+      setPaymentStatus(order.payment_status);
       setOrderDetailsOpen(true);
     }
   };
@@ -100,22 +68,33 @@ export function Orders({ orders }) {
   const handlePaymentStatusChange = (event) => {
     const newValue = event.target.value;
     setPaymentStatus(newValue);
+
+    if (selectedOrder) {
+      setSelectedOrder((prevOrder) => ({
+        ...prevOrder,
+        payment_status: newValue,
+      }));
+    }
+
     console.log("Payment Status Changed to:", newValue);
   };
 
+  useEffect(() => {
+    console.log("Updated Payment Status:", paymentStatus);
+    console.log(selectedOrder);
+  }, [paymentStatus, selectedOrder]);
+
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
-
+    console.log(selectedOrder);
+    console.log(selectedOrder.payment_status);
     try {
-      const updatedPaymentStatus = convertNumberToStatusKey(paymentStatus);
-      console.log("Saving Payment Status:", updatedPaymentStatus);
-
       const response = await axios.patch(
         `http://localhost:5000/orders/${selectedOrder.id}`,
-        { payment_status: updatedPaymentStatus },
+        { payment_status: selectedOrder.payment_status },
         { withCredentials: true }
       );
-
+      console.log(response.data);
       setSelectedOrder(response.data);
       setIsEditing(false);
     } catch (error) {
@@ -196,9 +175,10 @@ export function Orders({ orders }) {
               <>
                 <h4>Payment Status:</h4>
                 <Select value={paymentStatus} onChange={handlePaymentStatusChange} fullWidth>
-                  <MenuItem value={0}>Unconfirmed</MenuItem>
-                  <MenuItem value={1}>Paid</MenuItem>
-                  <MenuItem value={2}>Not Paid</MenuItem>
+                  <MenuItem value="Unconfirmed">Unconfirmed</MenuItem>
+                  <MenuItem value="Complete">Complete</MenuItem>
+                  <MenuItem value="Incomplete">Incomplete</MenuItem>
+                  <MenuItem value="Invalid">Invalid</MenuItem>
                 </Select>
               </>
             ) : (
