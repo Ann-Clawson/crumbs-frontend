@@ -11,6 +11,7 @@ export function Orders({ orders }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
+  const [deliveryStatus, setDeliveryStatus] = useState("");
 
   const orderRows = orders.map((order, index) => ({
     id: index,
@@ -45,6 +46,7 @@ export function Orders({ orders }) {
     if (order) {
       setSelectedOrder(order);
       setPaymentStatus(order.payment_status);
+      setDeliveryStatus(order.delivery_status);
       setOrderDetailsOpen(true);
     }
   };
@@ -84,17 +86,33 @@ export function Orders({ orders }) {
   //   console.log(selectedOrder);
   // }, [paymentStatus, selectedOrder]);
 
+  const handleDeliveryStatusChange = (event) => {
+    const newValue = event.target.value;
+    setDeliveryStatus(newValue);
+
+    if (selectedOrder) {
+      setSelectedOrder((prevOrder) => ({
+        ...prevOrder,
+        delivery_status: newValue,
+      }));
+    }
+
+    console.log("Delivery Status Changed to:", newValue);
+  };
+
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
-    // console.log(selectedOrder);
-    // console.log(selectedOrder.payment_status);
+
     try {
       const response = await axios.patch(
         `http://localhost:5000/orders/${selectedOrder.id}`,
-        { payment_status: selectedOrder.payment_status },
+        {
+          payment_status: selectedOrder.payment_status,
+          delivery_status: selectedOrder.delivery_status,
+        },
         { withCredentials: true }
       );
-      // console.log(response.data);
+      console.log(response.data);
       setSelectedOrder(response.data);
       setIsEditing(false);
     } catch (error) {
@@ -180,11 +198,21 @@ export function Orders({ orders }) {
                   <MenuItem value="Incomplete">Incomplete</MenuItem>
                   <MenuItem value="Invalid">Invalid</MenuItem>
                 </Select>
+                <h4>Delivery Status:</h4>
+                <Select value={deliveryStatus} onChange={handleDeliveryStatusChange} fullWidth>
+                  <MenuItem value="Not Sent">Not Sent</MenuItem>
+                  <MenuItem value="Mailed">Mailed</MenuItem>
+                  <MenuItem value="Delivered">Delivered</MenuItem>
+                  <MenuItem value="Delayed">Delayed</MenuItem>
+                  <MenuItem value="Picked Up">Picked Up</MenuItem>
+                </Select>
               </>
             ) : (
-              <h4>Payment Status: {selectedOrder.payment_status}</h4>
+              <>
+                <h4>Payment Status: {selectedOrder.payment_status}</h4>
+                <h4>Delivery Status: {selectedOrder.delivery_status}</h4>
+              </>
             )}
-            <h4>Delivery Status: {selectedOrder.delivery_status}</h4>
             <h4>Total Cost: ${selectedOrder.total_cost.toFixed(2)}</h4>
             <h4>Payment Method: {selectedOrder.payment_type}</h4>
             <h4>Order Cookies:</h4>
