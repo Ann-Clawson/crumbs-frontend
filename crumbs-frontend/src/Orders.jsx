@@ -49,11 +49,11 @@ export function Orders({ orders }) {
     }
   };
 
-  useEffect(() => {
-    if (selectedOrder) {
-      console.log("Selected Order:", selectedOrder);
-    }
-  }, [selectedOrder]);
+  // useEffect(() => {
+  //   if (selectedOrder) {
+  //     console.log("Selected Order:", selectedOrder);
+  //   }
+  // }, [selectedOrder]);
 
   const handleCloseOrderDetails = () => {
     setOrderDetailsOpen(false);
@@ -76,25 +76,25 @@ export function Orders({ orders }) {
       }));
     }
 
-    console.log("Payment Status Changed to:", newValue);
+    // console.log("Payment Status Changed to:", newValue);
   };
 
-  useEffect(() => {
-    console.log("Updated Payment Status:", paymentStatus);
-    console.log(selectedOrder);
-  }, [paymentStatus, selectedOrder]);
+  // useEffect(() => {
+  //   console.log("Updated Payment Status:", paymentStatus);
+  //   console.log(selectedOrder);
+  // }, [paymentStatus, selectedOrder]);
 
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
-    console.log(selectedOrder);
-    console.log(selectedOrder.payment_status);
+    // console.log(selectedOrder);
+    // console.log(selectedOrder.payment_status);
     try {
       const response = await axios.patch(
         `http://localhost:5000/orders/${selectedOrder.id}`,
         { payment_status: selectedOrder.payment_status },
         { withCredentials: true }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setSelectedOrder(response.data);
       setIsEditing(false);
     } catch (error) {
