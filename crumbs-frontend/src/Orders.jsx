@@ -6,7 +6,7 @@ import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuIte
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function Orders({ orders }) {
+export function Orders({ orders, updateOrder }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -115,6 +115,12 @@ export function Orders({ orders }) {
       console.log(response.data);
       setSelectedOrder(response.data);
       setIsEditing(false);
+
+      if (typeof updateOrder === "function") {
+        updateOrder(response.data);
+      }
+
+      setOrderDetailsOpen(false);
     } catch (error) {
       console.error("Failed to update order:", error);
     }

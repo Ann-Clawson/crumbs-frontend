@@ -105,6 +105,10 @@ export function Dashboard() {
   };
   console.log(orders);
 
+  const updateOrder = (updatedOrder) => {
+    setOrders((prevOrders) => prevOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order)));
+  };
+
   // Check if Data is Still Loading
   if (loadingUser || loadingInventory || loadingOrders) {
     return (
@@ -320,7 +324,7 @@ export function Dashboard() {
               maxHeight: "40vh",
             }}
           > */}
-          <Orders orders={orders} />
+          <Orders orders={orders} updateOrder={updateOrder} />
           {/* <DataGrid
               rows={rows}
               columns={columns}
