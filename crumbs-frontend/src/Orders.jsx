@@ -12,6 +12,7 @@ export function Orders({ orders, updateOrder }) {
   const [isEditing, setIsEditing] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState("");
   const [deliveryStatus, setDeliveryStatus] = useState("");
+  const [paymentType, setPaymentType] = useState("");
 
   const orderRows = orders.map((order, index) => ({
     id: index,
@@ -47,6 +48,7 @@ export function Orders({ orders, updateOrder }) {
       setSelectedOrder(order);
       setPaymentStatus(order.payment_status);
       setDeliveryStatus(order.delivery_status);
+      setPaymentType(order.payment_type);
       setOrderDetailsOpen(true);
     }
   };
@@ -86,6 +88,18 @@ export function Orders({ orders, updateOrder }) {
   //   console.log(selectedOrder);
   // }, [paymentStatus, selectedOrder]);
 
+  const handlePaymentTypeChange = (event) => {
+    const newValue = event.target.value;
+    setPaymentType(newValue);
+
+    if (selectedOrder) {
+      setSelectedOrder((prevOrder) => ({
+        ...prevOrder,
+        payment_type_name: newValue,
+      }));
+    }
+  };
+
   const handleDeliveryStatusChange = (event) => {
     const newValue = event.target.value;
     setDeliveryStatus(newValue);
@@ -109,6 +123,7 @@ export function Orders({ orders, updateOrder }) {
         {
           payment_status: selectedOrder.payment_status,
           delivery_status: selectedOrder.delivery_status,
+          payment_type_name: selectedOrder.payment_type_name,
         },
         { withCredentials: true }
       );
@@ -204,6 +219,14 @@ export function Orders({ orders, updateOrder }) {
                   <MenuItem value="Incomplete">Incomplete</MenuItem>
                   <MenuItem value="Invalid">Invalid</MenuItem>
                 </Select>
+                <h4>Payment Method:</h4>
+                <Select value={paymentType} onChange={handlePaymentTypeChange} fullWidth>
+                  <MenuItem value={"Unspecified"}>Unspecified</MenuItem>
+                  <MenuItem value={"Cash"}>Cash</MenuItem>
+                  <MenuItem value={"Credit"}>Credit</MenuItem>
+                  <MenuItem value={"Venmo"}>Venmo</MenuItem>
+                  <MenuItem value={"PayPal"}>PayPal</MenuItem>
+                </Select>
                 <h4>Delivery Status:</h4>
                 <Select value={deliveryStatus} onChange={handleDeliveryStatusChange} fullWidth>
                   <MenuItem value="Not Sent">Not Sent</MenuItem>
@@ -216,11 +239,10 @@ export function Orders({ orders, updateOrder }) {
             ) : (
               <>
                 <h4>Payment Status: {selectedOrder.payment_status}</h4>
+                <h4>Payment Method: {selectedOrder.payment_type}</h4>
                 <h4>Delivery Status: {selectedOrder.delivery_status}</h4>
               </>
             )}
-            <h4>Total Cost: ${selectedOrder.total_cost.toFixed(2)}</h4>
-            <h4>Payment Method: {selectedOrder.payment_type}</h4>
             <h4>Order Cookies:</h4>
             <ul>
               {selectedOrder.order_cookies.map((cookie, index) => (
@@ -229,6 +251,7 @@ export function Orders({ orders, updateOrder }) {
                 </li>
               ))}
             </ul>
+            <h4>Total Cost: ${selectedOrder.total_cost.toFixed(2)}</h4>
           </DialogContent>
           <DialogActions>
             {isEditing ? (
