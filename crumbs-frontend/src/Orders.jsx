@@ -30,8 +30,8 @@ export function Orders({ orders, updateOrder }) {
   const orderColumns = [
     { field: "firstName", headerName: "First Name", width: 125 },
     { field: "lastName", headerName: "Last  Name", width: 125 },
-    { field: "orderStatus", headerName: "Order Status", width: 180 },
-    { field: "paymentStatus", headerName: "Payment Status", width: 180 },
+    { field: "orderStatus", headerName: "Order Status", width: 150 },
+    // { field: "paymentStatus", headerName: "Payment Status", width: 180 },
     { field: "totalCost", headerName: "Total", width: 130 },
     {
       field: "viewDetails",
