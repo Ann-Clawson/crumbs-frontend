@@ -13,6 +13,8 @@ export function Orders({ orders, updateOrder }) {
   const [paymentStatus, setPaymentStatus] = useState("");
   const [deliveryStatus, setDeliveryStatus] = useState("");
   const [paymentType, setPaymentType] = useState("");
+  const [orderCookies, setOrderCookies] = useState([]);
+  const [editingCookieId, setEditingCookieId] = useState(null);
 
   const orderRows = orders.map((order, index) => ({
     id: index,
@@ -49,9 +51,14 @@ export function Orders({ orders, updateOrder }) {
       setPaymentStatus(order.payment_status);
       setDeliveryStatus(order.delivery_status);
       setPaymentType(order.payment_type);
+      setOrderCookies(order.order_cookies);
       setOrderDetailsOpen(true);
     }
   };
+
+  // useEffect(() => {
+  //   console.log("order cookies:", orderCookies);
+  // }, [orderCookies]);
 
   // useEffect(() => {
   //   if (selectedOrder) {
@@ -63,6 +70,7 @@ export function Orders({ orders, updateOrder }) {
     setOrderDetailsOpen(false);
     setSelectedOrder(null);
     setIsEditing(false);
+    setEditingCookieId(null);
   };
 
   const handleEditClick = () => {
@@ -112,6 +120,42 @@ export function Orders({ orders, updateOrder }) {
     }
 
     console.log("Delivery Status Changed to:", newValue);
+  };
+
+  const handleEditQuantity = (cookieId) => {
+    setEditingCookieId(cookieId);
+  };
+
+  const handleQuantityChange = (cookieId, newValue) => {
+    console.log(newValue);
+    setOrderCookies((prevOrderCookies) =>
+      prevOrderCookies.map((cookie) =>
+        cookie.cookie_id === cookieId ? { ...cookie, quantity: parseInt(newValue) || 0 } : cookie
+      )
+    );
+  };
+
+  const handleSaveQuantity = async (cookieId) => {
+    const cookieToUpdate = orderCookies.find((cookie) => cookie.cookie_id === cookieId);
+    if (!cookieToUpdate) return;
+    console.log(cookieToUpdate);
+
+    try {
+      const response = await axios.patch(
+        `http://localhost:5000/order_cookies/${selectedOrder.id}/${cookieId}`,
+        { quantity: cookieToUpdate.quantity },
+        { withCredentials: true }
+      );
+      console.log("Updated Cookie:", response.data);
+
+      setOrderCookies((prevOrderCookies) =>
+        prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, ...response.data } : cookie))
+      );
+
+      setEditingCookieId(null);
+    } catch (error) {
+      console.error("Failed to update cookie quantity:", error);
+    }
   };
 
   const handleSaveChanges = async () => {
@@ -244,13 +288,52 @@ export function Orders({ orders, updateOrder }) {
               </>
             )}
             <h4>Order Cookies:</h4>
-            <ul>
+            {/* <ul>
               {selectedOrder.order_cookies.map((cookie, index) => (
                 <li key={index}>
                   {cookie.cookie_name} - Quantity: {cookie.quantity}, Price: ${cookie.price.toFixed(2)}
                 </li>
               ))}
+            </ul> */}
+            <ul>
+              {orderCookies.map((cookie) => (
+                <li key={cookie.cookie_id}>
+                  {cookie.cookie_name} - Quantity:{" "}
+                  {editingCookieId === cookie.cookie_id ? (
+                    <input
+                      type="number"
+                      value={cookie.quantity}
+                      onChange={(e) => handleQuantityChange(cookie.cookie_id, e.target.value)}
+                      style={{ width: "50px", marginLeft: "10px", marginRight: "10px" }}
+                    />
+                  ) : (
+                    <span>{cookie.quantity}</span>
+                  )}
+                  , Price: ${cookie.price.toFixed(2)}
+                  {editingCookieId === cookie.cookie_id ? (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => handleSaveQuantity(cookie.cookie_id)}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      Save
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => handleEditQuantity(cookie.cookie_id)}
+                      style={{ marginLeft: "10px" }}
+                    >
+                      Edit Qty
+                    </Button>
+                  )}
+                </li>
+              ))}
             </ul>
+
             <h4>Total Cost: ${selectedOrder.total_cost.toFixed(2)}</h4>
           </DialogContent>
           <DialogActions>
