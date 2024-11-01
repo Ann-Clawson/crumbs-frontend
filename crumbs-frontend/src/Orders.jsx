@@ -138,7 +138,6 @@ export function Orders({ orders, updateOrder }) {
   const handleSaveQuantity = async (cookieId) => {
     const cookieToUpdate = orderCookies.find((cookie) => cookie.cookie_id === cookieId);
     if (!cookieToUpdate) return;
-    console.log(cookieToUpdate);
 
     try {
       const response = await axios.patch(
@@ -146,11 +145,19 @@ export function Orders({ orders, updateOrder }) {
         { quantity: cookieToUpdate.quantity },
         { withCredentials: true }
       );
-      console.log("Updated Cookie:", response.data);
 
       setOrderCookies((prevOrderCookies) =>
         prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, ...response.data } : cookie))
       );
+
+      const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
+        withCredentials: true,
+      });
+      const updatedOrder = updatedOrderResponse.data;
+
+      if (typeof updateOrder === "function") {
+        updateOrder(updatedOrder);
+      }
 
       setEditingCookieId(null);
     } catch (error) {
@@ -288,13 +295,6 @@ export function Orders({ orders, updateOrder }) {
               </>
             )}
             <h4>Order Cookies:</h4>
-            {/* <ul>
-              {selectedOrder.order_cookies.map((cookie, index) => (
-                <li key={index}>
-                  {cookie.cookie_name} - Quantity: {cookie.quantity}, Price: ${cookie.price.toFixed(2)}
-                </li>
-              ))}
-            </ul> */}
             <ul>
               {orderCookies.map((cookie) => (
                 <li key={cookie.cookie_id}>
