@@ -103,7 +103,7 @@ export function Dashboard() {
         });
     }
   };
-  console.log(orders);
+  // console.log(orders);
 
   const updateOrder = (updatedOrder) => {
     setOrders((prevOrders) => prevOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order)));

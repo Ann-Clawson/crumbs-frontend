@@ -15,6 +15,7 @@ export function Orders({ orders, updateOrder }) {
   const [paymentType, setPaymentType] = useState("");
   const [orderCookies, setOrderCookies] = useState([]);
   const [editingCookieId, setEditingCookieId] = useState(null);
+  const [totalCost, setTotalCost] = useState(0);
 
   const orderRows = orders.map((order, index) => ({
     id: index,
@@ -52,6 +53,10 @@ export function Orders({ orders, updateOrder }) {
       setDeliveryStatus(order.delivery_status);
       setPaymentType(order.payment_type);
       setOrderCookies(order.order_cookies);
+
+      const initialTotalCost = order.order_cookies.reduce((total, cookie) => total + cookie.quantity * 6, 0);
+      setTotalCost(initialTotalCost);
+
       setOrderDetailsOpen(true);
     }
   };
@@ -127,12 +132,30 @@ export function Orders({ orders, updateOrder }) {
   };
 
   const handleQuantityChange = (cookieId, newValue) => {
-    console.log(newValue);
+    // console.log(newValue);
+    // setOrderCookies((prevOrderCookies) =>
+    //   prevOrderCookies.map((cookie) =>
+    //     cookie.cookie_id === cookieId ? { ...cookie, quantity: parseInt(newValue) || 0 } : cookie
+    //   )
+    // );
+
+    const quantity = parseInt(newValue) || 0;
+
+    // Update the orderCookies state
     setOrderCookies((prevOrderCookies) =>
-      prevOrderCookies.map((cookie) =>
-        cookie.cookie_id === cookieId ? { ...cookie, quantity: parseInt(newValue) || 0 } : cookie
-      )
+      prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, quantity } : cookie))
     );
+
+    // Update the total cost based on the new quantity
+    setTotalCost((prevTotalCost) => {
+      const cookie = orderCookies.find((cookie) => cookie.cookie_id === cookieId);
+      if (cookie) {
+        const oldQuantity = cookie.quantity;
+        const difference = quantity - oldQuantity;
+        return prevTotalCost + difference * 6;
+      }
+      return prevTotalCost;
+    });
   };
 
   const handleSaveQuantity = async (cookieId) => {
@@ -150,10 +173,16 @@ export function Orders({ orders, updateOrder }) {
         prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, ...response.data } : cookie))
       );
 
+      console.log(orderCookies);
+      console.log(selectedOrder);
+
       const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
         withCredentials: true,
       });
+
       const updatedOrder = updatedOrderResponse.data;
+
+      console.log(updatedOrderResponse.data);
 
       if (typeof updateOrder === "function") {
         updateOrder(updatedOrder);
@@ -334,7 +363,7 @@ export function Orders({ orders, updateOrder }) {
               ))}
             </ul>
 
-            <h4>Total Cost: ${selectedOrder.total_cost.toFixed(2)}</h4>
+            <h4>Total Cost: ${totalCost.toFixed(2)}</h4>
           </DialogContent>
           <DialogActions>
             {isEditing ? (
