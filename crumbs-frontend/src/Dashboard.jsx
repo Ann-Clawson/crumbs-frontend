@@ -324,7 +324,7 @@ export function Dashboard() {
               maxHeight: "40vh",
             }}
           > */}
-          <Orders orders={orders} updateOrder={updateOrder} />
+          <Orders orders={orders} updateOrder={updateOrder} fetchUserInventory={fetchUserInventory} />
           {/* <DataGrid
               rows={rows}
               columns={columns}

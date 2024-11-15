@@ -6,7 +6,7 @@ import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuIte
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function Orders({ orders, updateOrder }) {
+export function Orders({ orders, updateOrder, fetchUserInventory }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -176,6 +176,8 @@ export function Orders({ orders, updateOrder }) {
       console.log(orderCookies);
       console.log(selectedOrder);
 
+      fetchUserInventory();
+
       const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
         withCredentials: true,
       });
@@ -209,6 +211,7 @@ export function Orders({ orders, updateOrder }) {
       );
       console.log(response.data);
       setSelectedOrder(response.data);
+      // fetchUserInventory();
       setIsEditing(false);
 
       if (typeof updateOrder === "function") {
