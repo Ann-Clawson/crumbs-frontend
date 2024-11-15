@@ -2,7 +2,17 @@
 // eslint-disable-next-line no-unused-vars
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 
@@ -16,6 +26,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const [orderCookies, setOrderCookies] = useState([]);
   const [editingCookieId, setEditingCookieId] = useState(null);
   const [totalCost, setTotalCost] = useState(0);
+  const [notes, setNotes] = useState("");
 
   // define the dashboard
   const orderRows = orders.map((order, index) => ({
@@ -109,8 +120,6 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         delivery_status: newValue,
       }));
     }
-
-    console.log("Delivery Status Changed to:", newValue);
   };
 
   const handleEditQuantity = (cookieId) => {
@@ -170,6 +179,10 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     }
   };
 
+  const handleNotesChange = (event) => {
+    setNotes(event.target.value);
+  };
+
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
 
@@ -207,6 +220,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
           delivery_status: selectedOrder.delivery_status,
           payment_type_name: selectedOrder.payment_type_name,
           order_status: orderStatus,
+          notes: notes,
         },
         { withCredentials: true }
       );
@@ -318,12 +332,15 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
                   <MenuItem value="Delayed">Delayed</MenuItem>
                   <MenuItem value="Picked Up">Picked Up</MenuItem>
                 </Select>
+                <h4>Notes:</h4>
+                <TextField value={notes} onChange={handleNotesChange} fullWidth multiline rows={4} variant="outlined" />
               </>
             ) : (
               <>
                 <h4>Payment Status: {selectedOrder.payment_status}</h4>
                 <h4>Payment Method: {selectedOrder.payment_type}</h4>
                 <h4>Delivery Status: {selectedOrder.delivery_status}</h4>
+                <h4>Notes: {selectedOrder.notes}</h4>
               </>
             )}
             <h4>Order Cookies:</h4>
