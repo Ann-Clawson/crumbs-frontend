@@ -3,7 +3,7 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuItem, Select } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
@@ -17,6 +17,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const [editingCookieId, setEditingCookieId] = useState(null);
   const [totalCost, setTotalCost] = useState(0);
 
+  // define the dashboard
   const orderRows = orders.map((order, index) => ({
     id: index,
     firstName: `${order.customer_first_name}`,
@@ -45,6 +46,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     },
   ];
 
+  // define modal contents
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     if (order) {
@@ -61,16 +63,6 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("order cookies:", orderCookies);
-  // }, [orderCookies]);
-
-  // useEffect(() => {
-  //   if (selectedOrder) {
-  //     console.log("Selected Order:", selectedOrder);
-  //   }
-  // }, [selectedOrder]);
-
   const handleCloseOrderDetails = () => {
     setOrderDetailsOpen(false);
     setSelectedOrder(null);
@@ -78,6 +70,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     setEditingCookieId(null);
   };
 
+  // enable property editing in modal
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -92,14 +85,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         payment_status: newValue,
       }));
     }
-
-    // console.log("Payment Status Changed to:", newValue);
   };
-
-  // useEffect(() => {
-  //   console.log("Updated Payment Status:", paymentStatus);
-  //   console.log(selectedOrder);
-  // }, [paymentStatus, selectedOrder]);
 
   const handlePaymentTypeChange = (event) => {
     const newValue = event.target.value;
@@ -132,16 +118,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   };
 
   const handleQuantityChange = (cookieId, newValue) => {
-    // console.log(newValue);
-    // setOrderCookies((prevOrderCookies) =>
-    //   prevOrderCookies.map((cookie) =>
-    //     cookie.cookie_id === cookieId ? { ...cookie, quantity: parseInt(newValue) || 0 } : cookie
-    //   )
-    // );
-
     const quantity = parseInt(newValue) || 0;
 
-    // Update the orderCookies state
     setOrderCookies((prevOrderCookies) =>
       prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, quantity } : cookie))
     );
@@ -173,9 +151,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, ...response.data } : cookie))
       );
 
-      // console.log(orderCookies);
-      // console.log(selectedOrder);
-
+      // dynamically update projected inventory
       fetchUserInventory();
 
       const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
@@ -183,8 +159,6 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
       });
 
       const updatedOrder = updatedOrderResponse.data;
-
-      console.log(updatedOrderResponse.data);
 
       if (typeof updateOrder === "function") {
         updateOrder(updatedOrder);
@@ -215,8 +189,6 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
       return;
     }
 
-    console.log(selectedOrder);
-
     // change order status to complete if payment and delivery status are finalized values
     let orderStatus = selectedOrder.order_status;
     if (
@@ -238,9 +210,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         },
         { withCredentials: true }
       );
-      console.log(response.data);
+
       setSelectedOrder(response.data);
-      // fetchUserInventory();
       setIsEditing(false);
 
       if (typeof updateOrder === "function") {
