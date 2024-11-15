@@ -227,6 +227,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
 
       setSelectedOrder(response.data);
       setIsEditing(false);
+      // dynamically update projected inventory
+      fetchUserInventory();
 
       if (typeof updateOrder === "function") {
         updateOrder(response.data);
