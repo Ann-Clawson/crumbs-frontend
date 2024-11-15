@@ -393,6 +393,7 @@ export function Dashboard() {
               <Button
                 sx={{
                   margin: "10px",
+                  visibility: "hidden",
                 }}
                 variant="contained"
                 color="primary"
