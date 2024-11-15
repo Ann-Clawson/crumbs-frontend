@@ -6,7 +6,7 @@ import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, MenuIte
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function Orders({ orders, updateOrder, fetchUserInventory }) {
+export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -173,8 +173,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory }) {
         prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, ...response.data } : cookie))
       );
 
-      console.log(orderCookies);
-      console.log(selectedOrder);
+      // console.log(orderCookies);
+      // console.log(selectedOrder);
 
       fetchUserInventory();
 
@@ -199,6 +199,13 @@ export function Orders({ orders, updateOrder, fetchUserInventory }) {
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
 
+    console.log(selectedOrder);
+
+    let orderStatus = selectedOrder.order_status;
+    if (selectedOrder.payment_status === "Complete") {
+      orderStatus = "Complete";
+    }
+
     try {
       const response = await axios.patch(
         `http://localhost:5000/orders/${selectedOrder.id}`,
@@ -206,6 +213,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory }) {
           payment_status: selectedOrder.payment_status,
           delivery_status: selectedOrder.delivery_status,
           payment_type_name: selectedOrder.payment_type_name,
+          order_status: orderStatus,
         },
         { withCredentials: true }
       );
