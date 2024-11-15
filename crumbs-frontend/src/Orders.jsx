@@ -199,10 +199,31 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const handleSaveChanges = async () => {
     if (!selectedOrder) return;
 
+    // order cannot be saved if actual inventory would become negative
+    const negativeInventory = orderCookies.some((orderCookie) => {
+      const cookieInventoryData = inventory[orderCookie.cookie_name];
+      if (!cookieInventoryData) {
+        return true;
+      }
+      const newInventory = cookieInventoryData.inventory - orderCookie.quantity;
+      return newInventory < 0;
+    });
+
+    if (negativeInventory) {
+      console.error("Cannot save changes: One or more cookies would have negative inventory.");
+      alert("Cannot save changes: One or more cookies would have negative inventory.");
+      return;
+    }
+
     console.log(selectedOrder);
 
+    // change order status to complete if payment and delivery status are finalized values
     let orderStatus = selectedOrder.order_status;
-    if (selectedOrder.payment_status === "Complete") {
+    if (
+      selectedOrder.payment_status === "Complete" &&
+      selectedOrder.delivery_status !== "Not Sent" &&
+      selectedOrder.delivery_status !== "Delayed"
+    ) {
       orderStatus = "Complete";
     }
 
