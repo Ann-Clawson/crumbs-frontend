@@ -507,7 +507,7 @@ export function Dashboard() {
                     sx={{ marginRight: "10px", width: "100px" }}
                   />
                   <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
-                    Adjust Actual Total
+                    ADD/DELETE QUANTITY
                   </Button>
                 </div>
               </Box>
