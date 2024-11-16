@@ -113,28 +113,47 @@ export function SignUp() {
       setPasswordConfirmationErrorMessage("");
     }
 
-    if (isValid) {
-      handleOpenSuccessModal();
-    }
-
     return isValid;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Clear previous errors
+    setEmailError(false);
+    setEmailErrorMessage("");
 
     const isValid = validateInputs();
     if (!isValid) {
       return;
     }
+
     const params = new FormData(event.currentTarget);
-    axios.post("http://localhost:5000/register", params).then((response) => {
-      if (response.data === "New user added") {
+
+    try {
+      const response = await axios.post("http://localhost:5000/register", params, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+
+      if (response.status === 200 && response.data.status === "success") {
         event.target.reset();
-      } else {
-        setEmailErrorMessage(response.data);
+        handleOpenSuccessModal();
+      } else if (response.data.status === "error") {
+        setEmailError(true);
+        setEmailErrorMessage(response.data.message || "An error occurred. Please try again.");
       }
-    });
+    } catch (error) {
+      if (error.response && error.response.data) {
+        const errorMessage = error.response.data.message || "An error occurred. Please try again.";
+        setEmailError(true);
+        setEmailErrorMessage(errorMessage);
+      } else {
+        setEmailError(true);
+        setEmailErrorMessage("An unknown error occurred. Please try again.");
+      }
+    }
   };
 
   const handleOpenSuccessModal = () => {
@@ -177,7 +196,7 @@ export function SignUp() {
                     label="First Name"
                     autoFocus
                     error={firstNameError}
-                    helperText={firstNameErrorMessage}
+                    helperText={firstNameErrorMessage || ""}
                     color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
@@ -190,7 +209,7 @@ export function SignUp() {
                     name="last_name"
                     autoComplete="family-name"
                     error={lastNameError}
-                    helperText={lastNameErrorMessage}
+                    helperText={lastNameErrorMessage || ""}
                     color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
@@ -203,7 +222,7 @@ export function SignUp() {
                     name="email"
                     autoComplete="email"
                     error={emailError}
-                    helperText={emailErrorMessage}
+                    helperText={emailErrorMessage || ""}
                     color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
@@ -217,7 +236,7 @@ export function SignUp() {
                     id="password"
                     autoComplete="new-password"
                     error={passwordError}
-                    helperText={passwordErrorMessage}
+                    helperText={passwordErrorMessage || ""}
                     color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
@@ -231,7 +250,7 @@ export function SignUp() {
                     id="passwordConfirm"
                     autoComplete="new-password"
                     error={passwordConfirmationError}
-                    helperText={passwordConfirmationErrorMessage}
+                    helperText={passwordConfirmationErrorMessage || ""}
                     color={passwordError ? "error" : "primary"}
                   />
                 </Grid>
