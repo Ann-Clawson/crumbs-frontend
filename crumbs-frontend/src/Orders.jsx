@@ -29,6 +29,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const [notes, setNotes] = useState("");
   const [originalQuantities, setOriginalQuantities] = useState({});
   const [originalTotalCost, setOriginalTotalCost] = useState(0);
+  const [availableCookies, setAvailableCookies] = useState([]);
+  const [selectedCookieToAdd, setSelectedCookieToAdd] = useState(null);
 
   // define the dashboard
   const orderRows = orders.map((order, index) => ({
@@ -58,8 +60,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     },
   ];
 
-  // define modal contents
-  const handleOpenOrderDetails = (orderId) => {
+  const handleOpenOrderDetails = async (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     if (order) {
       const filteredOrderCookies = order.order_cookies.filter((cookie) => cookie.quantity > 0);
@@ -79,9 +80,45 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
 
       const initialTotalCost = filteredOrderCookies.reduce((total, cookie) => total + cookie.quantity * 6, 0);
       setTotalCost(initialTotalCost);
-
-      // save the original total cost
       setOriginalTotalCost(initialTotalCost);
+
+      try {
+        const allCookiesResponse = await axios.get(`http://localhost:5000/cookies`, { withCredentials: true });
+        // console.log("All Cookies Full Response:", allCookiesResponse);
+
+        const allCookies = allCookiesResponse.data.cookies;
+
+        // console.log("Filtered Order Cookies:", filteredOrderCookies);
+        // console.log("All Cookies:", allCookies);
+
+        // filter out cookies that are already in the current order
+        const filteredAvailableCookies = allCookies.filter((cookie) => {
+          const isAlreadyInOrder = filteredOrderCookies.some((orderCookie) => orderCookie.cookie_id === cookie.id);
+
+          // Log the comparison details
+          // console.log(`Checking if "${cookie.name}" (cookie id: ${cookie.id}) is in the order.`);
+          // filteredOrderCookies.forEach((orderCookie) => {
+          //   console.log(
+          //     `Comparing against order cookie "${orderCookie.cookie_name}" (cookie_id: ${orderCookie.cookie_id})`
+          //   );
+          // });
+
+          // if (isAlreadyInOrder) {
+          //   console.log(`Cookie "${cookie.name}" is already in the order and will be filtered out.`);
+          // } else {
+          //   console.log(`Cookie "${cookie.name}" is NOT in the order and will be available to add.`);
+          // }
+
+          return !isAlreadyInOrder;
+        });
+
+        // console.log("Filtered Available Cookies:", filteredAvailableCookies);
+
+        setAvailableCookies(filteredAvailableCookies);
+      } catch (error) {
+        console.error("Failed to fetch available cookies or unexpected response:", error);
+        alert("Unable to fetch available cookies. Please try again later.");
+      }
 
       setOrderDetailsOpen(true);
     }
@@ -170,7 +207,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         return updatedCookies;
       });
 
-      // update the main order state (selectedOrder) so parent component state gets updated too
+      // update the order state so parent component state gets updated too
       setSelectedOrder((prevOrder) => {
         const updatedOrder = {
           ...prevOrder,
@@ -179,7 +216,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         return updatedOrder;
       });
 
-      // update dashboard total cost to sync changes
+      // update dashboard total cost
       if (typeof updateOrder === "function") {
         const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
           withCredentials: true,
@@ -245,6 +282,74 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
       setEditingCookieId(null);
     } catch (error) {
       console.error("Failed to update cookie quantity:", error);
+    }
+  };
+
+  const handleAddCookieToOrder = async () => {
+    // if (!selectedCookieToAdd) return;
+
+    // try {
+    //   // Add the selected cookie to the backend order
+    //   const response = await axios.post(
+    //     `http://localhost:5000/order_cookies/${selectedOrder.id}`,
+    //     {
+    //       cookie_id: selectedCookieToAdd.cookie_id,
+    //       quantity: 1, // Default quantity when adding
+    //     },
+    //     { withCredentials: true }
+    //   );
+
+    //   const addedCookie = response.data;
+
+    //   // Update the order cookies state locally
+    //   setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
+
+    //   // Update the total cost
+    //   setTotalCost((prevTotalCost) => prevTotalCost + addedCookie.quantity * addedCookie.price);
+
+    //   // Update the available cookies list
+    //   setAvailableCookies((prevAvailableCookies) =>
+    //     prevAvailableCookies.filter((cookie) => cookie.cookie_id !== selectedCookieToAdd.cookie_id)
+    //   );
+
+    //   // Clear the selected cookie state
+    //   setSelectedCookieToAdd(null);
+    // } catch (error) {
+    //   console.error("Failed to add cookie to the order:", error);
+    //   alert("Failed to add the cookie. Please try again.");
+    // }
+
+    if (!selectedCookieToAdd) return;
+
+    try {
+      // Add the selected cookie to the backend order
+      const response = await axios.post(
+        `http://localhost:5000/order_cookies/${selectedOrder.id}`,
+        {
+          cookie_id: selectedCookieToAdd.cookie_id,
+          quantity: 1, // Default quantity when adding
+        },
+        { withCredentials: true }
+      );
+
+      const addedCookie = response.data;
+
+      // Update the order cookies state locally
+      setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
+
+      // Update the total cost based on the added cookie's quantity and price
+      setTotalCost((prevTotalCost) => prevTotalCost + addedCookie.quantity * 6);
+
+      // Remove the newly added cookie from the available cookies list
+      setAvailableCookies((prevAvailableCookies) =>
+        prevAvailableCookies.filter((cookie) => cookie.cookie_id !== selectedCookieToAdd.cookie_id)
+      );
+
+      // Clear the selected cookie state
+      setSelectedCookieToAdd(null);
+    } catch (error) {
+      console.error("Failed to add cookie to the order:", error);
+      alert("Failed to add the cookie. Please try again.");
     }
   };
 
@@ -473,6 +578,34 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
                 </li>
               ))}
             </ul>
+
+            <div style={{ marginTop: "20px" }}>
+              <h4>Add Cookie to Order:</h4>
+              <select
+                value={selectedCookieToAdd ? selectedCookieToAdd.cookie_id : ""}
+                onChange={(e) => {
+                  const cookie = availableCookies.find((cookie) => cookie.cookie_id === parseInt(e.target.value));
+                  setSelectedCookieToAdd(cookie);
+                }}
+                style={{ marginRight: "10px" }}
+              >
+                <option value="">Select a cookie</option>
+                {availableCookies.map((cookie) => (
+                  <option key={cookie.cookie_id} value={cookie.cookie_id}>
+                    {cookie.name} - Price: ${cookie.price.toFixed(2)}
+                  </option>
+                ))}
+              </select>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={handleAddCookieToOrder}
+                disabled={!selectedCookieToAdd}
+              >
+                Add Cookie
+              </Button>
+            </div>
 
             <h4>Total Cost: ${totalCost.toFixed(2)}</h4>
           </DialogContent>
