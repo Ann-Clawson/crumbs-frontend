@@ -286,66 +286,30 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   };
 
   const handleAddCookieToOrder = async () => {
-    // if (!selectedCookieToAdd) return;
-
-    // try {
-    //   // Add the selected cookie to the backend order
-    //   const response = await axios.post(
-    //     `http://localhost:5000/order_cookies/${selectedOrder.id}`,
-    //     {
-    //       cookie_id: selectedCookieToAdd.cookie_id,
-    //       quantity: 1, // Default quantity when adding
-    //     },
-    //     { withCredentials: true }
-    //   );
-
-    //   const addedCookie = response.data;
-
-    //   // Update the order cookies state locally
-    //   setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
-
-    //   // Update the total cost
-    //   setTotalCost((prevTotalCost) => prevTotalCost + addedCookie.quantity * addedCookie.price);
-
-    //   // Update the available cookies list
-    //   setAvailableCookies((prevAvailableCookies) =>
-    //     prevAvailableCookies.filter((cookie) => cookie.cookie_id !== selectedCookieToAdd.cookie_id)
-    //   );
-
-    //   // Clear the selected cookie state
-    //   setSelectedCookieToAdd(null);
-    // } catch (error) {
-    //   console.error("Failed to add cookie to the order:", error);
-    //   alert("Failed to add the cookie. Please try again.");
-    // }
-
     if (!selectedCookieToAdd) return;
 
     try {
-      // Add the selected cookie to the backend order
       const response = await axios.post(
         `http://localhost:5000/order_cookies/${selectedOrder.id}`,
         {
           cookie_id: selectedCookieToAdd.cookie_id,
-          quantity: 1, // Default quantity when adding
+          quantity: 1, // default qty
         },
         { withCredentials: true }
       );
 
       const addedCookie = response.data;
 
-      // Update the order cookies state locally
       setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
 
-      // Update the total cost based on the added cookie's quantity and price
       setTotalCost((prevTotalCost) => prevTotalCost + addedCookie.quantity * 6);
 
-      // Remove the newly added cookie from the available cookies list
+      // remove the newly added cookie from the available cookies
       setAvailableCookies((prevAvailableCookies) =>
         prevAvailableCookies.filter((cookie) => cookie.cookie_id !== selectedCookieToAdd.cookie_id)
       );
 
-      // Clear the selected cookie state
+      // clear the selected cookie state
       setSelectedCookieToAdd(null);
     } catch (error) {
       console.error("Failed to add cookie to the order:", error);
