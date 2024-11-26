@@ -61,13 +61,16 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     if (order) {
+      // Filter out cookies with quantity greater than 0
+      const filteredOrderCookies = order.order_cookies.filter((cookie) => cookie.quantity > 0);
+
       setSelectedOrder(order);
       setPaymentStatus(order.payment_status);
       setDeliveryStatus(order.delivery_status);
       setPaymentType(order.payment_type);
-      setOrderCookies(order.order_cookies);
+      setOrderCookies(filteredOrderCookies); // Set filtered cookies here
 
-      const initialTotalCost = order.order_cookies.reduce((total, cookie) => total + cookie.quantity * 6, 0);
+      const initialTotalCost = filteredOrderCookies.reduce((total, cookie) => total + cookie.quantity * 6, 0);
       setTotalCost(initialTotalCost);
 
       setOrderDetailsOpen(true);
