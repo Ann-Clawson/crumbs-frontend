@@ -27,6 +27,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const [editingCookieId, setEditingCookieId] = useState(null);
   const [totalCost, setTotalCost] = useState(0);
   const [notes, setNotes] = useState("");
+  const [originalQuantities, setOriginalQuantities] = useState({});
+  const [originalTotalCost, setOriginalTotalCost] = useState(0);
 
   // define the dashboard
   const orderRows = orders.map((order, index) => ({
@@ -43,7 +45,6 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     { field: "firstName", headerName: "First Name", width: 125 },
     { field: "lastName", headerName: "Last  Name", width: 125 },
     { field: "orderStatus", headerName: "Order Status", width: 150 },
-    // { field: "paymentStatus", headerName: "Payment Status", width: 180 },
     { field: "totalCost", headerName: "Total", width: 130 },
     {
       field: "viewDetails",
@@ -61,17 +62,26 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   const handleOpenOrderDetails = (orderId) => {
     const order = orders.find((order) => order.id === orderId);
     if (order) {
-      // Filter out cookies with quantity greater than 0
       const filteredOrderCookies = order.order_cookies.filter((cookie) => cookie.quantity > 0);
 
       setSelectedOrder(order);
       setPaymentStatus(order.payment_status);
       setDeliveryStatus(order.delivery_status);
       setPaymentType(order.payment_type);
-      setOrderCookies(filteredOrderCookies); // Set filtered cookies here
+      setOrderCookies(filteredOrderCookies);
+
+      // save original quantities for reverting changes if needed
+      const quantities = {};
+      filteredOrderCookies.forEach((cookie) => {
+        quantities[cookie.cookie_id] = cookie.quantity;
+      });
+      setOriginalQuantities(quantities);
 
       const initialTotalCost = filteredOrderCookies.reduce((total, cookie) => total + cookie.quantity * 6, 0);
       setTotalCost(initialTotalCost);
+
+      // save the original total cost
+      setOriginalTotalCost(initialTotalCost);
 
       setOrderDetailsOpen(true);
     }
@@ -87,6 +97,19 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
   // enable property editing in modal
   const handleEditClick = () => {
     setIsEditing(true);
+  };
+
+  // cancel editing, revert changes
+  const handleCancelEdit = () => {
+    setOrderCookies((prevOrderCookies) =>
+      prevOrderCookies.map((cookie) => ({
+        ...cookie,
+        quantity: originalQuantities[cookie.cookie_id] || cookie.quantity,
+      }))
+    );
+
+    setTotalCost(originalTotalCost);
+    setEditingCookieId(null);
   };
 
   const handlePaymentStatusChange = (event) => {
@@ -129,6 +152,49 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
     setEditingCookieId(cookieId);
   };
 
+  // delete cookie from order
+  const handleDeleteCookie = async (cookieId) => {
+    try {
+      await axios.delete(`http://localhost:5000/order_cookies/${selectedOrder.id}/${cookieId}`, {
+        withCredentials: true,
+      });
+
+      // update local order cookies state by removing the deleted cookie
+      setOrderCookies((prevOrderCookies) => {
+        const updatedCookies = prevOrderCookies.filter((cookie) => cookie.cookie_id !== cookieId);
+
+        // update total cost after deletion
+        const updatedTotalCost = updatedCookies.reduce((total, cookie) => total + cookie.quantity * 6, 0);
+        setTotalCost(updatedTotalCost);
+
+        return updatedCookies;
+      });
+
+      // update the main order state (selectedOrder) so parent component state gets updated too
+      setSelectedOrder((prevOrder) => {
+        const updatedOrder = {
+          ...prevOrder,
+          order_cookies: prevOrder.order_cookies.filter((cookie) => cookie.cookie_id !== cookieId),
+        };
+        return updatedOrder;
+      });
+
+      // update dashboard total cost to sync changes
+      if (typeof updateOrder === "function") {
+        const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
+          withCredentials: true,
+        });
+
+        const updatedOrder = updatedOrderResponse.data;
+
+        updateOrder(updatedOrder);
+      }
+    } catch (error) {
+      console.error("Failed to delete cookie from the order:", error);
+      alert("Failed to delete the cookie. Please try again.");
+    }
+  };
+
   const handleQuantityChange = (cookieId, newValue) => {
     const quantity = parseInt(newValue) || 0;
 
@@ -136,7 +202,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
       prevOrderCookies.map((cookie) => (cookie.cookie_id === cookieId ? { ...cookie, quantity } : cookie))
     );
 
-    // Update the total cost based on the new quantity
+    // update total cost based on new quantity
     setTotalCost((prevTotalCost) => {
       const cookie = orderCookies.find((cookie) => cookie.cookie_id === cookieId);
       if (cookie) {
@@ -365,15 +431,35 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
                   )}
                   , Price: ${cookie.price.toFixed(2)}
                   {editingCookieId === cookie.cookie_id ? (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="small"
-                      onClick={() => handleSaveQuantity(cookie.cookie_id)}
-                      style={{ marginLeft: "10px" }}
-                    >
-                      Save
-                    </Button>
+                    <>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        onClick={() => handleSaveQuantity(cookie.cookie_id)}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        size="small"
+                        onClick={handleCancelEdit}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        onClick={() => handleDeleteCookie(cookie.cookie_id)}
+                        style={{ marginLeft: "10px" }}
+                      >
+                        Delete
+                      </Button>
+                    </>
                   ) : (
                     <Button
                       variant="outlined"
