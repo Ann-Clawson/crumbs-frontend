@@ -16,7 +16,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
+export function Orders({ orders, updateOrder, fetchUserInventory, inventory, removeOrder }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -216,6 +216,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         return updatedOrder;
       });
 
+      // dynamically update projected inventory
       fetchUserInventory();
 
       // update dashboard total cost
@@ -368,6 +369,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
 
       setSelectedOrder(response.data);
       setIsEditing(false);
+
       // dynamically update projected inventory
       fetchUserInventory();
 
@@ -378,6 +380,45 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
       setOrderDetailsOpen(false);
     } catch (error) {
       console.error("Failed to update order:", error);
+    }
+  };
+
+  const handleDeleteOrder = async () => {
+    if (!selectedOrder) return;
+
+    try {
+      // add order cookies from the order back to the user's inventory
+      for (const orderCookie of selectedOrder.order_cookies) {
+        const currentInventory = parseInt(inventory[orderCookie.cookie_name].inventory, 10);
+        const adjustment = parseInt(orderCookie.quantity, 10);
+
+        const newInventory = currentInventory + adjustment;
+
+        const formData = new FormData();
+        formData.append("cookie_name", orderCookie.cookie_name);
+        formData.append("inventory", newInventory);
+
+        await axios.post("http://localhost:5000/users/inventory", formData, {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+
+      await axios.delete(`http://localhost:5000/orders/${selectedOrder.id}`, {
+        withCredentials: true,
+      });
+
+      // remove the order from the orders list after deletion
+      if (typeof removeOrder === "function") {
+        removeOrder(selectedOrder.id);
+      }
+
+      setOrderDetailsOpen(false);
+      fetchUserInventory();
+    } catch (error) {
+      console.error("Failed to delete order or update inventory:", error);
     }
   };
 
@@ -594,6 +635,9 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
                 Edit Order
               </Button>
             )}
+            <Button onClick={handleDeleteOrder} color="secondary">
+              Delete Order
+            </Button>
             <Button onClick={handleCloseOrderDetails} color="secondary">
               Close
             </Button>

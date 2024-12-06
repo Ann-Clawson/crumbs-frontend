@@ -125,6 +125,10 @@ export function Dashboard() {
     );
   }
 
+  const removeOrder = (orderId) => {
+    setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
+  };
+
   // Add Cookies to Current Inventory Dashboard if unpopulated
   const fetchCookieNames = async () => {
     try {
@@ -329,6 +333,7 @@ export function Dashboard() {
             updateOrder={updateOrder}
             fetchUserInventory={fetchUserInventory}
             inventory={inventory}
+            removeOrder={removeOrder}
           />
           {/* <DataGrid
               rows={rows}
