@@ -47,30 +47,30 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
     {
       field: "firstName",
       headerName: "First Name",
-      width: 125,
+      width: 115,
     },
     {
       field: "lastName",
       headerName: "Last  Name",
-      width: 125,
+      width: 115,
     },
     {
       field: "orderStatus",
       headerName: "Order Status",
-      width: 150,
+      width: 125,
     },
     {
       field: "totalCost",
       headerName: "Total",
-      width: 130,
+      width: 100,
     },
     {
       field: "viewDetails",
       headerName: "View Details",
-      width: 150,
+      width: 125,
       renderCell: (params) => (
         <Button variant="contained" color="primary" onClick={() => handleOpenOrderDetails(params.row.orderId)}>
-          View Details
+          Details
         </Button>
       ),
     },
