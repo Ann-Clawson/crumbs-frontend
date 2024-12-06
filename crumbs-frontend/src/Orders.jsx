@@ -216,6 +216,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         return updatedOrder;
       });
 
+      fetchUserInventory();
+
       // update dashboard total cost
       if (typeof updateOrder === "function") {
         const updatedOrderResponse = await axios.get(`http://localhost:5000/orders/${selectedOrder.id}`, {
@@ -287,7 +289,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
 
   const handleAddCookieToOrder = async () => {
     if (!selectedCookieToAdd) return;
-
+    console.log("selectedCookieToAdd");
     try {
       const response = await axios.post(
         `http://localhost:5000/order_cookies/${selectedOrder.id}`,
@@ -299,6 +301,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
       );
 
       const addedCookie = response.data;
+      console.log(addedCookie);
 
       setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
 
@@ -309,8 +312,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
         prevAvailableCookies.filter((cookie) => cookie.cookie_id !== selectedCookieToAdd.cookie_id)
       );
 
-      // clear the selected cookie state
-      setSelectedCookieToAdd(null);
+      // keep the selected cookie visible after adding it
+      setSelectedCookieToAdd(addedCookie);
     } catch (error) {
       console.error("Failed to add cookie to the order:", error);
       alert("Failed to add the cookie. Please try again.");
@@ -548,8 +551,16 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
               <select
                 value={selectedCookieToAdd ? selectedCookieToAdd.cookie_id : ""}
                 onChange={(e) => {
-                  const cookie = availableCookies.find((cookie) => cookie.cookie_id === parseInt(e.target.value));
-                  setSelectedCookieToAdd(cookie);
+                  const cookieId = parseInt(e.target.selectedOptions[0].value);
+                  console.log(e.target.selectedOptions[0].value);
+                  console.log("Dropdown value:", e.target.value);
+                  console.log("Parsed cookieId:", cookieId);
+                  if (!isNaN(cookieId)) {
+                    const cookie = availableCookies.find((cookie) => cookie.cookie_id === cookieId);
+                    setSelectedCookieToAdd(cookie);
+                  } else {
+                    setSelectedCookieToAdd(null);
+                  }
                 }}
                 style={{ marginRight: "10px" }}
               >
@@ -565,7 +576,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory }) {
                 color="primary"
                 size="small"
                 onClick={handleAddCookieToOrder}
-                disabled={!selectedCookieToAdd}
+                // disabled={!selectedCookieToAdd}
               >
                 Add Cookie
               </Button>
