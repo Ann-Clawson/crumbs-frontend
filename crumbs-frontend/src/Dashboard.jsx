@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Orders } from "./Orders";
+import { Currencies } from "./Currencies";
 import { Button, Modal, Box, TextField, IconButton, CircularProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -278,105 +279,111 @@ export function Dashboard() {
           }}
         >
           {/* TOP RIGHT */}
-          <Orders
-            orders={orders}
-            updateOrder={updateOrder}
-            fetchUserInventory={fetchUserInventory}
-            inventory={inventory}
-            removeOrder={removeOrder}
-          />
-        </Box>
-        {/* BOTTOM RIGHT */}
-        <Box
-          sx={{
-            minHeight: "40vh",
-            maxHeight: "40vh",
-            backgroundColor: "white",
-            opacity: 0.9,
-            margin: 0,
-            borderRadius: "10px",
-            overflow: "hidden",
-            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
-          }}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h2 className="current-inventory">Current Inventory</h2>
-            <Button
-              sx={{
-                margin: "10px",
-                visibility: "hidden",
-              }}
-              variant="contained"
-              color="primary"
-            >
-              Add Cookies
-            </Button>
-          </div>
-          <DataGrid
-            rows={inventoryRows}
-            columns={inventoryColumns}
+          <Box
             sx={{
-              "& .MuiDataGrid-root": {
-                borderRadius: "0px",
-              },
-              "& .MuiDataGrid-columnHeaders": {
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-              },
-              "& .MuiDataGrid-footerContainer": {
-                backgroundColor: "white",
-                opacity: 0.9,
-                borderBottomLeftRadius: "10px",
-                borderBottomRightRadius: "10px",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                fontWeight: "bold",
-              },
+              marginBottom: "10%",
             }}
-          />
-          <Modal open={adjustModalOpen} onClose={handleCloseAdjustModal}>
-            <Box
+          >
+            <Currencies
+              orders={orders}
+              updateOrder={updateOrder}
+              fetchUserInventory={fetchUserInventory}
+              inventory={inventory}
+              removeOrder={removeOrder}
+            />
+          </Box>
+          {/* BOTTOM RIGHT */}
+          <Box
+            sx={{
+              minHeight: "40vh",
+              maxHeight: "40vh",
+              backgroundColor: "white",
+              opacity: 0.9,
+              margin: 0,
+              borderRadius: "10px",
+              overflow: "hidden",
+              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <h2 className="current-inventory">Current Inventory</h2>
+              <Button
+                sx={{
+                  margin: "10px",
+                  visibility: "hidden",
+                }}
+                variant="contained"
+                color="primary"
+              >
+                Add Cookies
+              </Button>
+            </div>
+            <DataGrid
+              rows={inventoryRows}
+              columns={inventoryColumns}
               sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: 400,
-                bgcolor: "background.paper",
-                boxShadow: 24,
-                p: 4,
+                "& .MuiDataGrid-root": {
+                  borderRadius: "0px",
+                },
+                "& .MuiDataGrid-columnHeaders": {
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                },
+                "& .MuiDataGrid-footerContainer": {
+                  backgroundColor: "white",
+                  opacity: 0.9,
+                  borderBottomLeftRadius: "10px",
+                  borderBottomRightRadius: "10px",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  fontWeight: "bold",
+                },
               }}
-            >
-              {/* MODAL HEADER WITH CLOSE BUTTON*/}
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: "10px",
+            />
+            <Modal open={adjustModalOpen} onClose={handleCloseAdjustModal}>
+              <Box
+                sx={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 400,
+                  bgcolor: "background.paper",
+                  boxShadow: 24,
+                  p: 4,
                 }}
               >
-                <h3 style={{ margin: 0 }}>{cookieToAdjust?.cookieName}</h3>
-                <IconButton onClick={handleCloseAdjustModal} size="small">
-                  <CloseIcon />
-                </IconButton>
-              </div>
+                {/* MODAL HEADER WITH CLOSE BUTTON*/}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <h3 style={{ margin: 0 }}>{cookieToAdjust?.cookieName}</h3>
+                  <IconButton onClick={handleCloseAdjustModal} size="small">
+                    <CloseIcon />
+                  </IconButton>
+                </div>
 
-              {/* MODAL CONTENT */}
-              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <TextField
-                  type="number"
-                  label="Quantity"
-                  value={adjustmentValue}
-                  onChange={(e) => setAdjustmentValue(e.target.value)}
-                  sx={{ marginRight: "10px", width: "100px" }}
-                />
-                <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
-                  ADD/DELETE QUANTITY
-                </Button>
-              </div>
-            </Box>
-          </Modal>
+                {/* MODAL CONTENT */}
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <TextField
+                    type="number"
+                    label="Quantity"
+                    value={adjustmentValue}
+                    onChange={(e) => setAdjustmentValue(e.target.value)}
+                    sx={{ marginRight: "10px", width: "100px" }}
+                  />
+                  <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
+                    ADD/DELETE QUANTITY
+                  </Button>
+                </div>
+              </Box>
+            </Modal>
+          </Box>
         </Box>
       </Box>
     </div>

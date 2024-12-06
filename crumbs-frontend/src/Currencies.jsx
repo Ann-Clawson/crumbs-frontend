@@ -22,36 +22,17 @@ export function Currencies({ orders }) {
     id: index,
     firstName: `${order.customer_first_name}`,
     lastName: `${order.customer_last_name}`,
-    orderStatus: order.order_status,
-    paymentStatus: order.payment_status,
-    totalCost: `$${order.total_cost.toFixed(2)}`,
-    orderId: order.id,
   }));
 
   const orderColumns = [
     {
       field: "firstName",
-      headerName: "First Name",
-      width: 125,
-    },
-    {
-      field: "lastName",
-      headerName: "Last  Name",
-      width: 125,
-    },
-    {
-      field: "orderStatus",
-      headerName: "Order Status",
+      headerName: "Currency Type",
       width: 150,
     },
     {
-      field: "totalCost",
-      headerName: "Total",
-      width: 130,
-    },
-    {
-      field: "viewDetails",
-      headerName: "View Details",
+      field: "lastName",
+      headerName: "Current Balance",
       width: 150,
     },
   ];
