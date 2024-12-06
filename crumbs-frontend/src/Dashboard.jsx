@@ -35,7 +35,46 @@ export function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
 
-  // Retrieve Current User
+  // define the dashboard
+  const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
+    id: index,
+    cookieName: cookieName,
+    inventory: inventory[cookieName].inventory,
+    projectedInventory: inventory[cookieName].projected_inventory,
+  }));
+
+  const inventoryColumns = [
+    {
+      field: "cookieName",
+      headerName: "Cookie Name",
+      width: 200,
+      editable: false,
+    },
+    {
+      field: "inventory",
+      headerName: "Actual",
+      width: 100,
+      editable: false,
+    },
+    {
+      field: "projectedInventory",
+      headerName: "Projected",
+      width: 100,
+      editable: false,
+    },
+    {
+      field: "adjust",
+      headerName: "Update Actual",
+      width: 180,
+      renderCell: (params) => (
+        <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
+          Adjust
+        </Button>
+      ),
+    },
+  ];
+
+  // retrieve current user
   useEffect(() => {
     axios
       .get("http://localhost:5000/current-user", { withCredentials: true })
@@ -52,7 +91,7 @@ export function Dashboard() {
       });
   }, []);
 
-  // Retrieve Current Users' Inventory
+  // retrieve current users' inventory
   useEffect(() => {
     if (currentUser) {
       fetchUserInventory();
@@ -78,7 +117,7 @@ export function Dashboard() {
     }
   };
 
-  // Retrieve Current Users' Orders
+  // retrieve current users' orders
   useEffect(() => {
     if (currentUser) {
       fetchUserOrders();
@@ -103,13 +142,12 @@ export function Dashboard() {
         });
     }
   };
-  // console.log(orders);
 
   const updateOrder = (updatedOrder) => {
     setOrders((prevOrders) => prevOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order)));
   };
 
-  // Check if Data is Still Loading
+  // check if data is still loading
   if (loadingUser || loadingInventory || loadingOrders) {
     return (
       <Box
@@ -129,7 +167,7 @@ export function Dashboard() {
     setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
   };
 
-  // Add Cookies to Current Inventory Dashboard if unpopulated
+  // add cookies to current inventory dashboard if unpopulated
   const fetchCookieNames = async () => {
     try {
       const response = await axios.get("http://localhost:5000/cookies");
@@ -172,7 +210,7 @@ export function Dashboard() {
     }
   };
 
-  // Adjust Actual Inventory Manually
+  // adjust actual inventory manually
   const handleOpenAdjustModal = (cookie) => {
     setCookieToAdjust(cookie);
     setAdjustmentValue("");
@@ -223,45 +261,6 @@ export function Dashboard() {
     }
   };
 
-  // Define Current Inventory DataGrid
-  const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
-    id: index,
-    cookieName: cookieName,
-    inventory: inventory[cookieName].inventory,
-    projectedInventory: inventory[cookieName].projected_inventory,
-  }));
-
-  const inventoryColumns = [
-    {
-      field: "cookieName",
-      headerName: "Cookie Name",
-      width: 200,
-      editable: false,
-    },
-    {
-      field: "inventory",
-      headerName: "Actual",
-      width: 100,
-      editable: false,
-    },
-    {
-      field: "projectedInventory",
-      headerName: "Projected",
-      width: 100,
-      editable: false,
-    },
-    {
-      field: "adjust",
-      headerName: "Update Actual",
-      width: 180,
-      renderCell: (params) => (
-        <Button variant="contained" color="primary" onClick={() => handleOpenAdjustModal(params.row)}>
-          Adjust
-        </Button>
-      ),
-    },
-  ];
-
   const handleLogOut = async () => {
     try {
       await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
@@ -291,7 +290,6 @@ export function Dashboard() {
           justifyContent: "space-around",
           width: "100%",
           height: "100vh",
-          // padding: "2vh",
         }}
       >
         {/* LEFT CONTAINER */}
@@ -321,13 +319,6 @@ export function Dashboard() {
             <h1>Howdy, {currentUser.first_name}!</h1>
           </Box>
           {/* BOTTOM LEFT */}
-          {/* <Box
-            sx={{
-              height: "50%",
-              minHeight: "40vh",
-              maxHeight: "40vh",
-            }}
-          > */}
           <Orders
             orders={orders}
             updateOrder={updateOrder}
@@ -335,21 +326,6 @@ export function Dashboard() {
             inventory={inventory}
             removeOrder={removeOrder}
           />
-          {/* <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              checkboxSelection
-              disableRowSelectionOnClick
-            /> */}
-          {/* </Box> */}
         </Box>
         {/* RIGHT CONTAINER */}
         <Box
@@ -492,7 +468,7 @@ export function Dashboard() {
                   p: 4,
                 }}
               >
-                {/* Modal Header with Close Button */}
+                {/* MODAL HEADER WITH CLOSE BUTTON*/}
                 <div
                   style={{
                     display: "flex",
@@ -507,7 +483,7 @@ export function Dashboard() {
                   </IconButton>
                 </div>
 
-                {/* Modal Content */}
+                {/* MODAL CONTENT */}
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                   <TextField
                     type="number"

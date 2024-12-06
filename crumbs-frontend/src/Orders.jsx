@@ -44,10 +44,26 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
   }));
 
   const orderColumns = [
-    { field: "firstName", headerName: "First Name", width: 125 },
-    { field: "lastName", headerName: "Last  Name", width: 125 },
-    { field: "orderStatus", headerName: "Order Status", width: 150 },
-    { field: "totalCost", headerName: "Total", width: 130 },
+    {
+      field: "firstName",
+      headerName: "First Name",
+      width: 125,
+    },
+    {
+      field: "lastName",
+      headerName: "Last  Name",
+      width: 125,
+    },
+    {
+      field: "orderStatus",
+      headerName: "Order Status",
+      width: 150,
+    },
+    {
+      field: "totalCost",
+      headerName: "Total",
+      width: 130,
+    },
     {
       field: "viewDetails",
       headerName: "View Details",
@@ -84,35 +100,14 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
 
       try {
         const allCookiesResponse = await axios.get(`http://localhost:5000/cookies`, { withCredentials: true });
-        // console.log("All Cookies Full Response:", allCookiesResponse);
 
         const allCookies = allCookiesResponse.data.cookies;
 
-        // console.log("Filtered Order Cookies:", filteredOrderCookies);
-        // console.log("All Cookies:", allCookies);
-
-        // filter out cookies that are already in the current order
         const filteredAvailableCookies = allCookies.filter((cookie) => {
           const isAlreadyInOrder = filteredOrderCookies.some((orderCookie) => orderCookie.cookie_id === cookie.id);
 
-          // Log the comparison details
-          // console.log(`Checking if "${cookie.name}" (cookie id: ${cookie.id}) is in the order.`);
-          // filteredOrderCookies.forEach((orderCookie) => {
-          //   console.log(
-          //     `Comparing against order cookie "${orderCookie.cookie_name}" (cookie_id: ${orderCookie.cookie_id})`
-          //   );
-          // });
-
-          // if (isAlreadyInOrder) {
-          //   console.log(`Cookie "${cookie.name}" is already in the order and will be filtered out.`);
-          // } else {
-          //   console.log(`Cookie "${cookie.name}" is NOT in the order and will be available to add.`);
-          // }
-
           return !isAlreadyInOrder;
         });
-
-        // console.log("Filtered Available Cookies:", filteredAvailableCookies);
 
         setAvailableCookies(filteredAvailableCookies);
       } catch (error) {
@@ -131,7 +126,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
     setEditingCookieId(null);
   };
 
-  // enable property editing in modal
+  // enable property editing in modal (doesn't include cookies)
   const handleEditClick = () => {
     setIsEditing(true);
   };
@@ -480,7 +475,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
         }}
       />
 
-      {/* Dialog to show order details */}
+      {/* SHOW ORDER DETAILS */}
       {selectedOrder && (
         <Dialog open={orderDetailsOpen} onClose={handleCloseOrderDetails}>
           <DialogTitle>
