@@ -4,9 +4,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
-// import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -61,7 +58,7 @@ export default function LogIn() {
 
     if (!isValid) {
       setErrors(validationErrors);
-      return; // Exit the function to prevent the API call
+      return; // exit function to prevent the API call
     }
 
     axios
@@ -117,8 +114,8 @@ export default function LogIn() {
               name="email"
               autoComplete="email"
               autoFocus
-              value={emailInput} // Use the renamed state variable
-              onChange={(e) => setEmailInput(e.target.value)} // Update the state on input change
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
             />
             <TextField
               margin="normal"

@@ -1,10 +1,7 @@
 import { Home } from "./Home";
 import { SignUp } from "./Signup";
 import { Dashboard } from "./Dashboard";
-// import { useState, useEffect } from "react";
-// import axios from "axios";
 import { Routes, Route } from "react-router-dom";
-// import { Dashboard } from "@mui/icons-material";
 
 export function Content() {
   return (

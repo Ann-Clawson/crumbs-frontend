@@ -119,7 +119,7 @@ export function SignUp() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Clear previous errors
+    // clear previous errors
     setEmailError(false);
     setEmailErrorMessage("");
 
@@ -171,7 +171,6 @@ export function SignUp() {
           <CssBaseline />
           <Box
             sx={{
-              // marginTop: 8,
               paddingTop: "50%",
               display: "flex",
               flexDirection: "column",
