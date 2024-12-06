@@ -4,20 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Orders } from "./Orders";
-import {
-  Button,
-  Modal,
-  Box,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField,
-  Select,
-  MenuItem,
-  IconButton,
-  CircularProgress,
-} from "@mui/material";
+import { Button, Modal, Box, TextField, IconButton, CircularProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 export function Dashboard() {
@@ -25,10 +12,6 @@ export function Dashboard() {
   const [loadingUser, setLoadingUser] = useState(true);
   const [inventory, setInventory] = useState({});
   const [loadingInventory, setLoadingInventory] = useState(true);
-  const [open, setOpen] = useState(false);
-  const [cookieNames, setCookieNames] = useState([]);
-  const [selectedCookie, setSelectedCookie] = useState("");
-  const [quantity, setQuantity] = useState("");
   const [adjustModalOpen, setAdjustModalOpen] = useState(false);
   const [cookieToAdjust, setCookieToAdjust] = useState(null);
   const [adjustmentValue, setAdjustmentValue] = useState("");
@@ -167,49 +150,6 @@ export function Dashboard() {
     setOrders((prevOrders) => prevOrders.filter((order) => order.id !== orderId));
   };
 
-  // add cookies to current inventory dashboard if unpopulated
-  const fetchCookieNames = async () => {
-    try {
-      const response = await axios.get("http://localhost:5000/cookies");
-      const data = response.data;
-      setCookieNames(data.cookies);
-    } catch (error) {
-      console.error("Error fetching cookie names:", error);
-    }
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-    fetchCookieNames();
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleAddCookie = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("cookie_name", selectedCookie);
-      formData.append("inventory", quantity);
-
-      const response = await axios.post("http://localhost:5000/users/inventory", formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.status === 200 || response.status === 201) {
-        fetchUserInventory();
-        handleClose();
-      } else {
-        alert("Error adding cookie");
-      }
-    } catch (error) {
-      console.error("Error adding cookie:", error);
-    }
-  };
-
   // adjust actual inventory manually
   const handleOpenAdjustModal = (cookie) => {
     setCookieToAdjust(cookie);
@@ -338,167 +278,105 @@ export function Dashboard() {
           }}
         >
           {/* TOP RIGHT */}
-          <Box
-            sx={{
-              marginBottom: "10%",
-              minHeight: "40vh",
-              maxHeight: "40vh",
-            }}
-          >
-            <h2>Currencies</h2>
-            {/* <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 5,
-                  },
-                },
+          <Orders
+            orders={orders}
+            updateOrder={updateOrder}
+            fetchUserInventory={fetchUserInventory}
+            inventory={inventory}
+            removeOrder={removeOrder}
+          />
+        </Box>
+        {/* BOTTOM RIGHT */}
+        <Box
+          sx={{
+            minHeight: "40vh",
+            maxHeight: "40vh",
+            backgroundColor: "white",
+            opacity: 0.9,
+            margin: 0,
+            borderRadius: "10px",
+            overflow: "hidden",
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2 className="current-inventory">Current Inventory</h2>
+            <Button
+              sx={{
+                margin: "10px",
+                visibility: "hidden",
               }}
-              pageSizeOptions={[5]}
-              checkboxSelection
-              disableRowSelectionOnClick
-            /> */}
-          </Box>
-          {/* BOTTOM RIGHT */}
-          <Box
+              variant="contained"
+              color="primary"
+            >
+              Add Cookies
+            </Button>
+          </div>
+          <DataGrid
+            rows={inventoryRows}
+            columns={inventoryColumns}
             sx={{
-              minHeight: "40vh",
-              maxHeight: "40vh",
-              backgroundColor: "white",
-              opacity: 0.9,
-              margin: 0,
-              borderRadius: "10px",
-              overflow: "hidden",
-              boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
+              "& .MuiDataGrid-root": {
+                borderRadius: "0px",
+              },
+              "& .MuiDataGrid-columnHeaders": {
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+              },
+              "& .MuiDataGrid-footerContainer": {
+                backgroundColor: "white",
+                opacity: 0.9,
+                borderBottomLeftRadius: "10px",
+                borderBottomRightRadius: "10px",
+              },
+              "& .MuiDataGrid-columnHeaderTitle": {
+                fontWeight: "bold",
+              },
             }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <h2 className="current-inventory">Current Inventory</h2>
-              <Button
-                sx={{
-                  margin: "10px",
-                  visibility: "hidden",
-                }}
-                variant="contained"
-                color="primary"
-                onClick={handleOpen}
-              >
-                Add Cookies
-              </Button>
-              <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add Cookies to Inventory</DialogTitle>
-                <DialogContent>
-                  <div style={{ display: "flex", alignItems: "center", paddingTop: "10px" }}>
-                    <Select
-                      value={selectedCookie || ""}
-                      onChange={(e) => setSelectedCookie(e.target.value)}
-                      displayEmpty
-                      sx={{ marginRight: "10px", minWidth: "150px" }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select a cookie
-                      </MenuItem>
-                      {cookieNames.map((cookie, index) => (
-                        <MenuItem key={index} value={cookie.name}>
-                          {cookie.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <TextField
-                      type="number"
-                      label="Quantity"
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                      sx={{ marginRight: "10px", width: "80px" }}
-                    />
-                    <Button variant="contained" color="primary" onClick={handleAddCookie}>
-                      Add
-                    </Button>
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose} color="secondary">
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            </div>
-            <>
-              {Object.keys(inventory).length > 0 ? (
-                <DataGrid
-                  rows={inventoryRows}
-                  columns={inventoryColumns}
-                  sx={{
-                    "& .MuiDataGrid-root": {
-                      borderRadius: "0px",
-                    },
-                    "& .MuiDataGrid-columnHeaders": {
-                      borderTopLeftRadius: "10px",
-                      borderTopRightRadius: "10px",
-                    },
-                    "& .MuiDataGrid-footerContainer": {
-                      backgroundColor: "white",
-                      opacity: 0.9,
-                      borderBottomLeftRadius: "10px",
-                      borderBottomRightRadius: "10px",
-                    },
-                    "& .MuiDataGrid-columnHeaderTitle": {
-                      fontWeight: "bold",
-                    },
-                  }}
-                />
-              ) : (
-                <div style={{ textAlign: "center", padding: "20px" }}>
-                  <h3>Let&apos;s dough this!</h3>
-                </div>
-              )}
-            </>
-            <Modal open={adjustModalOpen} onClose={handleCloseAdjustModal}>
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: 400,
-                  bgcolor: "background.paper",
-                  boxShadow: 24,
-                  p: 4,
+          />
+          <Modal open={adjustModalOpen} onClose={handleCloseAdjustModal}>
+            <Box
+              sx={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                width: 400,
+                bgcolor: "background.paper",
+                boxShadow: 24,
+                p: 4,
+              }}
+            >
+              {/* MODAL HEADER WITH CLOSE BUTTON*/}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: "10px",
                 }}
               >
-                {/* MODAL HEADER WITH CLOSE BUTTON*/}
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    marginBottom: "10px",
-                  }}
-                >
-                  <h3 style={{ margin: 0 }}>{cookieToAdjust?.cookieName}</h3>
-                  <IconButton onClick={handleCloseAdjustModal} size="small">
-                    <CloseIcon />
-                  </IconButton>
-                </div>
+                <h3 style={{ margin: 0 }}>{cookieToAdjust?.cookieName}</h3>
+                <IconButton onClick={handleCloseAdjustModal} size="small">
+                  <CloseIcon />
+                </IconButton>
+              </div>
 
-                {/* MODAL CONTENT */}
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <TextField
-                    type="number"
-                    label="Quantity"
-                    value={adjustmentValue}
-                    onChange={(e) => setAdjustmentValue(e.target.value)}
-                    sx={{ marginRight: "10px", width: "100px" }}
-                  />
-                  <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
-                    ADD/DELETE QUANTITY
-                  </Button>
-                </div>
-              </Box>
-            </Modal>
-          </Box>
+              {/* MODAL CONTENT */}
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <TextField
+                  type="number"
+                  label="Quantity"
+                  value={adjustmentValue}
+                  onChange={(e) => setAdjustmentValue(e.target.value)}
+                  sx={{ marginRight: "10px", width: "100px" }}
+                />
+                <Button variant="contained" color="primary" onClick={handleAdjustTotal}>
+                  ADD/DELETE QUANTITY
+                </Button>
+              </div>
+            </Box>
+          </Modal>
         </Box>
       </Box>
     </div>
