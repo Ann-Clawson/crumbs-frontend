@@ -284,13 +284,7 @@ export function Dashboard() {
               marginBottom: "10%",
             }}
           >
-            <Currencies
-              orders={orders}
-              updateOrder={updateOrder}
-              fetchUserInventory={fetchUserInventory}
-              inventory={inventory}
-              removeOrder={removeOrder}
-            />
+            <Currencies currentUser={currentUser} />
           </Box>
           {/* BOTTOM RIGHT */}
           <Box

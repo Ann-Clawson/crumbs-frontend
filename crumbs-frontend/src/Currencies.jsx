@@ -1,41 +1,37 @@
-/* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
-import * as React from "react";
+import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  Box,
-  Button,
-  // Dialog,
-  // DialogTitle,
-  // DialogContent,
-  // DialogActions,
-  // MenuItem,
-  // Select,
-  // TextField,
-} from "@mui/material";
-// import { useState } from "react";
-// import axios from "axios";
+import { Box, Button } from "@mui/material";
 
-export function Currencies({ orders }) {
-  // define the dashboard
-  const orderRows = orders.map((order, index) => ({
-    id: index,
-    firstName: `${order.customer_first_name}`,
-    lastName: `${order.customer_last_name}`,
-  }));
+export function Currencies({ currentUser }) {
+  const [paymentSummary, setPaymentSummary] = useState([]);
 
-  const orderColumns = [
-    {
-      field: "firstName",
-      headerName: "Currency Type",
-      width: 150,
-    },
-    {
-      field: "lastName",
-      headerName: "Current Balance",
-      width: 150,
-    },
+  useEffect(() => {
+    if (currentUser) {
+      const { actual_balance, projected_balance } = currentUser;
+
+      // Combine actual and projected balances into a unified array
+      const summaryArray = Object.keys(actual_balance).map((paymentType) => ({
+        id: paymentType,
+        paymentType,
+        actualBalance: `$${actual_balance[paymentType].toFixed(2)}`,
+        projectedBalance: `$${(projected_balance[paymentType] || 0).toFixed(2)}`,
+      }));
+
+      setPaymentSummary(summaryArray);
+    }
+  }, [currentUser]);
+
+  const columns = [
+    { field: "paymentType", headerName: "Payment Type", width: 150 },
+    { field: "actualBalance", headerName: "Actual Balance", width: 150 },
+    { field: "projectedBalance", headerName: "Projected Balance", width: 150 },
   ];
+
+  if (!currentUser) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <Box
       sx={{
@@ -63,17 +59,10 @@ export function Currencies({ orders }) {
         </Button>
       </div>
       <DataGrid
-        rows={orderRows}
-        columns={orderColumns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
-          },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection={false}
+        rows={paymentSummary}
+        columns={columns}
+        pageSize={5}
+        rowsPerPageOptions={[5]}
         sx={{
           "& .MuiDataGrid-root": {
             borderRadius: "0px",
@@ -87,9 +76,6 @@ export function Currencies({ orders }) {
             opacity: 0.9,
             borderBottomLeftRadius: "10px",
             borderBottomRightRadius: "10px",
-          },
-          "& .MuiDataGrid-columnHeaderTitle": {
-            fontWeight: "bold",
           },
         }}
       />
