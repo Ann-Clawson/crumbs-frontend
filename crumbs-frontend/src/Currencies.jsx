@@ -8,11 +8,29 @@ import { Box, Button } from "@mui/material";
 export function Currencies({ currentUser }) {
   const [paymentSummary, setPaymentSummary] = useState([]);
 
+  const columns = [
+    {
+      field: "paymentType",
+      headerName: "Payment Type",
+      width: 150,
+    },
+    {
+      field: "actualBalance",
+      headerName: "Current Balance",
+      width: 150,
+    },
+    // {
+    //   field: "projectedBalance",
+    //   headerName: "Projected Balance",
+    //   width: 150,
+    // },
+  ];
+
   useEffect(() => {
     if (currentUser) {
       const { actual_balance, projected_balance } = currentUser;
 
-      // Combine actual and projected balances into a unified array
+      // combine actual and projected balances into an array
       const summaryArray = Object.keys(actual_balance).map((paymentType) => ({
         id: paymentType,
         paymentType,
@@ -23,12 +41,6 @@ export function Currencies({ currentUser }) {
       setPaymentSummary(summaryArray);
     }
   }, [currentUser]);
-
-  const columns = [
-    { field: "paymentType", headerName: "Payment Type", width: 150 },
-    { field: "actualBalance", headerName: "Actual Balance", width: 150 },
-    // { field: "projectedBalance", headerName: "Projected Balance", width: 150 },
-  ];
 
   return (
     <Box
@@ -59,8 +71,14 @@ export function Currencies({ currentUser }) {
       <DataGrid
         rows={paymentSummary}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5]}
         sx={{
           "& .MuiDataGrid-root": {
             borderRadius: "0px",
@@ -74,6 +92,9 @@ export function Currencies({ currentUser }) {
             opacity: 0.9,
             borderBottomLeftRadius: "10px",
             borderBottomRightRadius: "10px",
+          },
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: "bold",
           },
         }}
       />
