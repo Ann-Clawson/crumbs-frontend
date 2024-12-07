@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
 import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 
+// eslint-disable-next-line react/prop-types
 export function Currencies({ currentUser }) {
   const [paymentSummary, setPaymentSummary] = useState([]);
 
@@ -25,12 +27,8 @@ export function Currencies({ currentUser }) {
   const columns = [
     { field: "paymentType", headerName: "Payment Type", width: 150 },
     { field: "actualBalance", headerName: "Actual Balance", width: 150 },
-    { field: "projectedBalance", headerName: "Projected Balance", width: 150 },
+    // { field: "projectedBalance", headerName: "Projected Balance", width: 150 },
   ];
-
-  if (!currentUser) {
-    return <p>Loading...</p>;
-  }
 
   return (
     <Box
