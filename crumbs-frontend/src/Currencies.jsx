@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-// eslint-disable-next-line no-unused-vars
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 
-// eslint-disable-next-line react/prop-types
-export function Currencies({ currentUser }) {
-  const [paymentSummary, setPaymentSummary] = useState([]);
+export function Currencies({ paymentSummary }) {
+  // const [paymentSummary, setPaymentSummary] = useState([]);
 
   const columns = [
     {
@@ -26,21 +24,21 @@ export function Currencies({ currentUser }) {
     // },
   ];
 
-  useEffect(() => {
-    if (currentUser) {
-      const { actual_balance, projected_balance } = currentUser;
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     const { actual_balance, projected_balance } = currentUser;
 
-      // combine actual and projected balances into an array
-      const summaryArray = Object.keys(actual_balance).map((paymentType) => ({
-        id: paymentType,
-        paymentType,
-        actualBalance: `$${actual_balance[paymentType].toFixed(2)}`,
-        projectedBalance: `$${(projected_balance[paymentType] || 0).toFixed(2)}`,
-      }));
+  //     // combine actual and projected balances into an array
+  //     const summaryArray = Object.keys(actual_balance).map((paymentType) => ({
+  //       id: paymentType,
+  //       paymentType,
+  //       actualBalance: `$${actual_balance[paymentType].toFixed(2)}`,
+  //       projectedBalance: `$${(projected_balance[paymentType] || 0).toFixed(2)}`,
+  //     }));
 
-      setPaymentSummary(summaryArray);
-    }
-  }, [currentUser]);
+  //     setPaymentSummary(summaryArray);
+  //   }
+  // }, [currentUser]);
 
   return (
     <Box

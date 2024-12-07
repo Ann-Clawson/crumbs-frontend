@@ -18,6 +18,7 @@ export function Dashboard() {
   const [adjustmentValue, setAdjustmentValue] = useState("");
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
+  const [paymentSummary, setPaymentSummary] = useState(true);
 
   // define the dashboard
   const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
@@ -124,6 +125,38 @@ export function Dashboard() {
         .finally(() => {
           setLoadingOrders(false);
         });
+    }
+  };
+
+  // retrieve current users' completed order payment type balances
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserBalances();
+    }
+  }, [currentUser]);
+
+  const fetchUserBalances = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/current-user", {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        const refreshedUser = response.data;
+
+        const { actual_balance, projected_balance } = refreshedUser;
+
+        const summaryArray = Object.keys(actual_balance).map((paymentType) => ({
+          id: paymentType,
+          paymentType,
+          actualBalance: `$${actual_balance[paymentType].toFixed(2)}`,
+          projectedBalance: `$${(projected_balance[paymentType] || 0).toFixed(2)}`,
+        }));
+
+        setPaymentSummary(summaryArray);
+      }
+    } catch (error) {
+      console.error("Error refreshing current user or fetching balances:", error);
     }
   };
 
@@ -266,6 +299,7 @@ export function Dashboard() {
             fetchUserInventory={fetchUserInventory}
             inventory={inventory}
             removeOrder={removeOrder}
+            fetchUserBalances={fetchUserBalances}
           />
         </Box>
         {/* RIGHT CONTAINER */}
@@ -284,7 +318,7 @@ export function Dashboard() {
               marginBottom: "10%",
             }}
           >
-            <Currencies currentUser={currentUser} />
+            <Currencies key={JSON.stringify(paymentSummary)} paymentSummary={paymentSummary} />
           </Box>
           {/* BOTTOM RIGHT */}
           <Box

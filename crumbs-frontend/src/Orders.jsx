@@ -16,7 +16,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-export function Orders({ orders, updateOrder, fetchUserInventory, inventory, removeOrder }) {
+export function Orders({ orders, updateOrder, fetchUserInventory, inventory, removeOrder, fetchUserBalances }) {
   const [orderDetailsOpen, setOrderDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -365,8 +365,9 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
       setSelectedOrder(response.data);
       setIsEditing(false);
 
-      // dynamically update projected inventory
+      // dynamically update projected inventory and currencies
       fetchUserInventory();
+      fetchUserBalances();
 
       if (typeof updateOrder === "function") {
         updateOrder(response.data);
