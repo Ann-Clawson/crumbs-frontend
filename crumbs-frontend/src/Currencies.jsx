@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
-// import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button } from "@mui/material";
 
 export function Currencies({ paymentSummary }) {
-  // const [paymentSummary, setPaymentSummary] = useState([]);
-
   const columns = [
     {
       field: "paymentType",
@@ -23,22 +20,6 @@ export function Currencies({ paymentSummary }) {
     //   width: 150,
     // },
   ];
-
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     const { actual_balance, projected_balance } = currentUser;
-
-  //     // combine actual and projected balances into an array
-  //     const summaryArray = Object.keys(actual_balance).map((paymentType) => ({
-  //       id: paymentType,
-  //       paymentType,
-  //       actualBalance: `$${actual_balance[paymentType].toFixed(2)}`,
-  //       projectedBalance: `$${(projected_balance[paymentType] || 0).toFixed(2)}`,
-  //     }));
-
-  //     setPaymentSummary(summaryArray);
-  //   }
-  // }, [currentUser]);
 
   return (
     <Box
