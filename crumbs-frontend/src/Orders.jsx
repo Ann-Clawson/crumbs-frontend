@@ -47,22 +47,22 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
     {
       field: "firstName",
       headerName: "First Name",
-      width: 115,
+      width: 110,
     },
     {
       field: "lastName",
       headerName: "Last  Name",
-      width: 115,
+      width: 110,
     },
     {
       field: "orderStatus",
       headerName: "Order Status",
-      width: 125,
+      width: 115,
     },
     {
       field: "paymentStatus",
-      headerName: "Payment Status",
-      width: 125,
+      headerName: "Payment",
+      width: 115,
     },
     {
       field: "totalCost",
