@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
-import { Button } from "@mui/material";
+import { Button, Select, MenuItem, TextField } from "@mui/material";
 
 // eslint-disable-next-line react/prop-types
 export function OrderForm({ onSubmit, orderId, setOrderId }) {
@@ -85,22 +85,16 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
     <form onSubmit={handleSubmit}>
       <h3>1. Create Customer</h3>
       <div>
-        <label>
-          First Name:
-          <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required={!customerId} />
-        </label>
+        <h4>First Name:</h4>
+        <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} required={!customerId} />
       </div>
       <div>
-        <label>
-          Last Name:
-          <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required={!customerId} />
-        </label>
+        <h4>Last Name:</h4>
+        <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} required={!customerId} />
       </div>
       <div>
-        <label>
-          Email (Optional):
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
+        <h4>Email (Optional):</h4>
+        <TextField value={email} onChange={(e) => setEmail(e.target.value)} />
       </div>
       <Button
         variant="contained"
@@ -108,6 +102,7 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
         onClick={createCustomer}
         disabled={!!customerId}
         sx={{
+          marginTop: "10px",
           marginBottom: "10px",
           fontWeight: "bold",
         }}
@@ -117,28 +112,28 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
 
       <h3>2. Create Order</h3>
       <div>
-        <label>
-          Payment Type:
-          <select value={paymentTypeName} onChange={(e) => setPaymentTypeName(e.target.value)}>
-            <option value="Unspecified">Unspecified</option>
-            <option value="Cash">Cash</option>
-            <option value="Credit">Credit</option>
-            <option value="Venmo">Venmo</option>
-            <option value="PayPal">PayPal</option>
-          </select>
-        </label>
+        <h4>Payment Type:</h4>
+        <Select value={paymentTypeName} onChange={(e) => setPaymentTypeName(e.target.value)}>
+          <MenuItem value="Unspecified">Unspecified</MenuItem>
+          <MenuItem value="Cash">Cash</MenuItem>
+          <MenuItem value="Credit">Credit</MenuItem>
+          <MenuItem value="Venmo">Venmo</MenuItem>
+          <MenuItem value="PayPal">PayPal</MenuItem>
+        </Select>
       </div>
       <div>
-        <label>
-          Notes:
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Add any notes for the order here..."
-          />
-        </label>
+        <h4>Notes:</h4>
+        <TextField value={notes} onChange={(e) => setNotes(e.target.value)} />
       </div>
-      <button type="submit">{orderId ? "Update Order" : "Create Order"}</button>
+      <Button
+        variant="contained"
+        color="primary"
+        sx={{
+          marginTop: "10px",
+        }}
+      >
+        {orderId ? "Update Order" : "Create Order"}
+      </Button>
     </form>
   );
 }
