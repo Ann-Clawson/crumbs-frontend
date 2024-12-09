@@ -86,15 +86,15 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
       <h3>1. Create Customer</h3>
       <div>
         <h4>First Name:</h4>
-        <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} required={!customerId} />
+        <TextField value={firstName} onChange={(e) => setFirstName(e.target.value)} required={!customerId} fullWidth />
       </div>
       <div>
         <h4>Last Name:</h4>
-        <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} required={!customerId} />
+        <TextField value={lastName} onChange={(e) => setLastName(e.target.value)} required={!customerId} fullWidth />
       </div>
       <div>
         <h4>Email (Optional):</h4>
-        <TextField value={email} onChange={(e) => setEmail(e.target.value)} />
+        <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth />
       </div>
       <Button
         variant="contained"
@@ -112,8 +112,13 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
 
       <h3>2. Create Order</h3>
       <div>
+        <h4>Payment Status:</h4>
+        <Select fullWidth>
+          <MenuItem value="Complete">Complete</MenuItem>
+          <MenuItem value="Incomplete">Incomplete</MenuItem>
+        </Select>
         <h4>Payment Type:</h4>
-        <Select value={paymentTypeName} onChange={(e) => setPaymentTypeName(e.target.value)}>
+        <Select value={paymentTypeName} onChange={(e) => setPaymentTypeName(e.target.value)} fullWidth>
           <MenuItem value="Unspecified">Unspecified</MenuItem>
           <MenuItem value="Cash">Cash</MenuItem>
           <MenuItem value="Credit">Credit</MenuItem>
@@ -123,7 +128,7 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
       </div>
       <div>
         <h4>Notes:</h4>
-        <TextField value={notes} onChange={(e) => setNotes(e.target.value)} />
+        <TextField value={notes} onChange={(e) => setNotes(e.target.value)} fullWidth />
       </div>
       <Button
         variant="contained"
