@@ -304,19 +304,62 @@ export function Dashboard() {
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
             }}
           >
-            <div>
-              <button onClick={handleCreateOrderClick}>Create New Order</button>
-              {showModal && (
-                <div className="modal">
+            <Box>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleCreateOrderClick}
+                sx={{
+                  marginBottom: "10px",
+                  fontWeight: "bold",
+                }}
+              >
+                Create New Order
+              </Button>
+              <Modal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Box
+                  sx={{
+                    position: "relative",
+                    width: 400,
+                    bgcolor: "background.paper",
+                    borderRadius: "10px",
+                    boxShadow: 24,
+                    p: 4,
+                  }}
+                >
+                  {/* MODAL HEADER WITH CLOSE BUTTON */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <h2 style={{ margin: 0 }}>Create or Update Order</h2>
+                    <IconButton onClick={() => setShowModal(false)} size="small">
+                      <CloseIcon />
+                    </IconButton>
+                  </div>
+
+                  {/* ORDER FORM CONTENT */}
                   <OrderForm
                     onSubmit={handleFormSubmit}
                     orderId={orderId}
                     setOrderId={setOrderId}
                     customerId={customerId}
                   />
-                </div>
-              )}
-            </div>
+                </Box>
+              </Modal>
+            </Box>
           </Box>
           {/* BOTTOM LEFT */}
           <Orders
