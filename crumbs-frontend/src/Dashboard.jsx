@@ -328,10 +328,13 @@ export function Dashboard() {
                 <Box
                   sx={{
                     position: "relative",
-                    width: 400,
+                    width: "90%",
+                    maxWidth: 400,
+                    maxHeight: "90vh", // Set maximum height for the modal
                     bgcolor: "background.paper",
                     borderRadius: "10px",
                     boxShadow: 24,
+                    overflowY: "auto", // Enable scrolling within the modal
                     p: 4,
                   }}
                 >
@@ -351,12 +354,7 @@ export function Dashboard() {
                   </div>
 
                   {/* ORDER FORM CONTENT */}
-                  <OrderForm
-                    onSubmit={handleFormSubmit}
-                    orderId={orderId}
-                    setOrderId={setOrderId}
-                    // customerId={customerId}
-                  />
+                  <OrderForm onSubmit={handleFormSubmit} orderId={orderId} setOrderId={setOrderId} />
                 </Box>
               </Modal>
             </Box>
