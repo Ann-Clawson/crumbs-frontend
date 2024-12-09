@@ -32,6 +32,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
   const [availableCookies, setAvailableCookies] = useState([]);
   const [selectedCookieToAdd, setSelectedCookieToAdd] = useState(null);
 
+  console.log(orders);
+
   // define the dashboard
   const orderRows = orders.map((order, index) => ({
     id: index,

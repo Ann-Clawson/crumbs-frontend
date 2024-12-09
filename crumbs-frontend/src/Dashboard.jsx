@@ -5,6 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Orders } from "./Orders";
 import { Currencies } from "./Currencies";
+import { OrderForm } from "./OrderForm";
 import { Button, Modal, Box, TextField, IconButton, CircularProgress } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -19,6 +20,9 @@ export function Dashboard() {
   const [orders, setOrders] = useState([]);
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [paymentSummary, setPaymentSummary] = useState(true);
+  const [orderId, setOrderId] = useState(null);
+  const [customerId, setCustomerId] = useState("123"); // Example customer ID
+  const [showModal, setShowModal] = useState(false);
 
   // define the dashboard
   const inventoryRows = Object.keys(inventory).map((cookieName, index) => ({
@@ -235,6 +239,16 @@ export function Dashboard() {
     }
   };
 
+  const handleCreateOrderClick = () => {
+    setOrderId(null); // Reset order ID for new order
+    setShowModal(true); // Open the modal
+  };
+
+  const handleFormSubmit = (order) => {
+    console.log("Order submitted:", order);
+    setShowModal(false); // Close the modal
+  };
+
   const handleLogOut = async () => {
     try {
       await axios.post("http://localhost:5000/logout", {}, { withCredentials: true });
@@ -290,7 +304,19 @@ export function Dashboard() {
               boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.5)",
             }}
           >
-            <h1>Howdy, {currentUser.first_name}!</h1>
+            <div>
+              <button onClick={handleCreateOrderClick}>Create New Order</button>
+              {showModal && (
+                <div className="modal">
+                  <OrderForm
+                    onSubmit={handleFormSubmit}
+                    orderId={orderId}
+                    setOrderId={setOrderId}
+                    customerId={customerId}
+                  />
+                </div>
+              )}
+            </div>
           </Box>
           {/* BOTTOM LEFT */}
           <Orders
