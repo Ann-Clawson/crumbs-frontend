@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import axios from "axios";
+import { Button } from "@mui/material";
 
 // eslint-disable-next-line react/prop-types
 export function OrderForm({ onSubmit, orderId, setOrderId }) {
@@ -25,14 +26,14 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
           last_name: lastName,
           email: email ? email.trim().toLowerCase() : undefined,
         },
-        { withCredentials: true } // Include credentials for authentication
+        { withCredentials: true }
       );
 
       const data = response.data;
 
       if (data.status === "success") {
         alert(data.message);
-        setCustomerId(data.customer_id || ""); // Update customerId if it's returned
+        setCustomerId(data.customer_id || "");
       } else {
         console.error("Error creating customer:", data.message);
         alert(data.message || "Failed to create customer.");
@@ -82,7 +83,7 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3>Create Customer</h3>
+      <h3>1. Create Customer</h3>
       <div>
         <label>
           First Name:
@@ -101,11 +102,20 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
       </div>
-      <button type="button" onClick={createCustomer} disabled={!!customerId}>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={createCustomer}
+        disabled={!!customerId}
+        sx={{
+          marginBottom: "10px",
+          fontWeight: "bold",
+        }}
+      >
         {customerId ? "Customer Created" : "Create Customer"}
-      </button>
+      </Button>
 
-      <h3>Create or Update Order</h3>
+      <h3>2. Create Order</h3>
       <div>
         <label>
           Payment Type:

@@ -21,7 +21,7 @@ export function Dashboard() {
   const [loadingOrders, setLoadingOrders] = useState(true);
   const [paymentSummary, setPaymentSummary] = useState(true);
   const [orderId, setOrderId] = useState(null);
-  const [customerId, setCustomerId] = useState("123"); // Example customer ID
+  // const [customerId, setCustomerId] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   // define the dashboard
@@ -344,7 +344,7 @@ export function Dashboard() {
                       marginBottom: "20px",
                     }}
                   >
-                    <h2 style={{ margin: 0 }}>Create or Update Order</h2>
+                    <h2 style={{ margin: 0 }}>Create New Order</h2>
                     <IconButton onClick={() => setShowModal(false)} size="small">
                       <CloseIcon />
                     </IconButton>
@@ -355,7 +355,7 @@ export function Dashboard() {
                     onSubmit={handleFormSubmit}
                     orderId={orderId}
                     setOrderId={setOrderId}
-                    customerId={customerId}
+                    // customerId={customerId}
                   />
                 </Box>
               </Modal>
