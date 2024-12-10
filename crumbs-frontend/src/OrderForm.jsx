@@ -117,13 +117,23 @@ export function OrderForm({ onSubmit, orderId, setOrderId }) {
           <MenuItem value="Complete">Complete</MenuItem>
           <MenuItem value="Incomplete">Incomplete</MenuItem>
         </Select>
-        <h4>Payment Type:</h4>
+        <h4>Payment Method:</h4>
         <Select value={paymentTypeName} onChange={(e) => setPaymentTypeName(e.target.value)} fullWidth>
           <MenuItem value="Unspecified">Unspecified</MenuItem>
           <MenuItem value="Cash">Cash</MenuItem>
           <MenuItem value="Credit">Credit</MenuItem>
           <MenuItem value="Venmo">Venmo</MenuItem>
           <MenuItem value="PayPal">PayPal</MenuItem>
+        </Select>
+      </div>
+      <div>
+        <h4>Delivery Status:</h4>
+        <Select fullWidth>
+          <MenuItem value="Not Sent">Not Sent</MenuItem>
+          <MenuItem value="Mailed">Mailed</MenuItem>
+          <MenuItem value="Delivered">Delivered</MenuItem>
+          <MenuItem value="Delayed">Delayed</MenuItem>
+          <MenuItem value="Picked Up">Picked Up</MenuItem>
         </Select>
       </div>
       <div>

@@ -498,10 +498,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
               <>
                 <h4>Payment Status:</h4>
                 <Select value={paymentStatus} onChange={handlePaymentStatusChange} fullWidth>
-                  {/* <MenuItem value="Unconfirmed">Unconfirmed</MenuItem> */}
                   <MenuItem value="Complete">Complete</MenuItem>
                   <MenuItem value="Incomplete">Incomplete</MenuItem>
-                  {/* <MenuItem value="Invalid">Invalid</MenuItem> */}
                 </Select>
                 <h4>Payment Method:</h4>
                 <Select value={paymentType} onChange={handlePaymentTypeChange} fullWidth>
