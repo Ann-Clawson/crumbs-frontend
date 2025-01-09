@@ -32,7 +32,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
   const [availableCookies, setAvailableCookies] = useState([]);
   const [selectedCookieToAdd, setSelectedCookieToAdd] = useState(null);
 
-  console.log(orders);
+  // console.log(orders);
 
   // define the dashboard
   const orderRows = orders.map((order, index) => ({
@@ -117,6 +117,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
         });
 
         setAvailableCookies(filteredAvailableCookies);
+        // console.log(availableCookies);
       } catch (error) {
         console.error("Failed to fetch available cookies or unexpected response:", error);
         alert("Unable to fetch available cookies. Please try again later.");
@@ -291,8 +292,8 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
   };
 
   const handleAddCookieToOrder = async () => {
-    if (!selectedCookieToAdd) return;
-    console.log("selectedCookieToAdd");
+    // if (!selectedCookieToAdd) return;
+    // console.log("selectedCookieToAdd");
     try {
       const response = await axios.post(
         `http://localhost:5000/order_cookies/${selectedOrder.id}`,
@@ -591,14 +592,14 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
             <div style={{ marginTop: "20px" }}>
               <h4>Add Cookie to Order:</h4>
               <select
-                value={selectedCookieToAdd ? selectedCookieToAdd.cookie_id : ""}
+                value={selectedCookieToAdd ? selectedCookieToAdd.id : ""}
                 onChange={(e) => {
                   const cookieId = parseInt(e.target.selectedOptions[0].value);
                   console.log(e.target.selectedOptions[0].value);
                   console.log("Dropdown value:", e.target.value);
                   console.log("Parsed cookieId:", cookieId);
                   if (!isNaN(cookieId)) {
-                    const cookie = availableCookies.find((cookie) => cookie.cookie_id === cookieId);
+                    const cookie = availableCookies.find((cookie) => cookie.id === cookieId);
                     setSelectedCookieToAdd(cookie);
                   } else {
                     setSelectedCookieToAdd(null);
@@ -608,7 +609,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
               >
                 <option value="">Select a cookie</option>
                 {availableCookies.map((cookie) => (
-                  <option key={cookie.cookie_id} value={cookie.cookie_id}>
+                  <option key={cookie.id} value={cookie.id}>
                     {cookie.name} - Price: ${cookie.price.toFixed(2)}
                   </option>
                 ))}
