@@ -117,7 +117,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
         });
 
         setAvailableCookies(filteredAvailableCookies);
-        console.log("Available cookies:", availableCookies);
+        // console.log("Available cookies:", availableCookies);
       } catch (error) {
         console.error("Failed to fetch available cookies or unexpected response:", error);
         alert("Unable to fetch available cookies. Please try again later.");
@@ -292,14 +292,11 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
   };
 
   const handleAddCookieToOrder = async () => {
-    // if (!selectedCookieToAdd) return;
-    // console.log("selectedCookieToAdd");
     try {
       const response = await axios.post(
         `http://localhost:5000/order_cookies/${selectedOrder.id}/${selectedCookieToAdd.id}`,
         {
           cookie_id: selectedCookieToAdd.id,
-          // cookie_name: selectedCookieToAdd.name,
           order_id: selectedOrder.id,
           quantity: 1, // default qty
         },
@@ -307,7 +304,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
       );
 
       const addedCookie = response.data;
-      console.log("Added cookie:", addedCookie);
+      // console.log("Added cookie:", addedCookie);
 
       setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
 
@@ -317,9 +314,6 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
       setAvailableCookies((prevAvailableCookies) =>
         prevAvailableCookies.filter((cookie) => cookie.cookie_id !== selectedCookieToAdd.cookie_id)
       );
-
-      // keep the selected cookie visible after adding it
-      // setSelectedCookieToAdd(addedCookie);
     } catch (error) {
       console.error("Failed to add cookie to the order:", error);
       alert("Failed to add the cookie. Please try again.");
@@ -597,16 +591,16 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
                 value={selectedCookieToAdd ? selectedCookieToAdd.id : ""}
                 onChange={(e) => {
                   const cookieId = parseInt(e.target.selectedOptions[0].value);
-                  console.log(e.target.selectedOptions[0].value);
-                  console.log("Dropdown value:", e.target.value);
-                  console.log("Parsed cookieId:", cookieId);
+                  // console.log(e.target.selectedOptions[0].value);
+                  // console.log("Dropdown value:", e.target.value);
+                  // console.log("Parsed cookieId:", cookieId);
                   if (cookieId) {
                     const cookie = availableCookies.find((cookie) => cookie.id === cookieId);
-                    console.log("Cookie:", cookie);
+                    // console.log("Cookie:", cookie);
                     setSelectedCookieToAdd(cookie);
-                    console.log("Selected cookie to add:", selectedCookieToAdd);
+                    // console.log("Selected cookie to add:", selectedCookieToAdd);
                   } else {
-                    setSelectedCookieToAdd("poop");
+                    setSelectedCookieToAdd(null);
                   }
                 }}
                 style={{ marginRight: "10px" }}
