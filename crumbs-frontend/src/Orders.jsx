@@ -296,16 +296,18 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
     // console.log("selectedCookieToAdd");
     try {
       const response = await axios.post(
-        `http://localhost:5000/order_cookies/${selectedOrder.id}`,
+        `http://localhost:5000/order_cookies/${selectedOrder.id}/${selectedCookieToAdd.id}`,
         {
           cookie_id: selectedCookieToAdd.id,
+          // cookie_name: selectedCookieToAdd.name,
+          order_id: selectedOrder.id,
           quantity: 1, // default qty
         },
         { withCredentials: true }
       );
 
       const addedCookie = response.data;
-      console.log(addedCookie);
+      console.log("Added cookie:", addedCookie);
 
       setOrderCookies((prevOrderCookies) => [...prevOrderCookies, addedCookie]);
 
@@ -317,7 +319,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
       );
 
       // keep the selected cookie visible after adding it
-      setSelectedCookieToAdd(addedCookie);
+      // setSelectedCookieToAdd(addedCookie);
     } catch (error) {
       console.error("Failed to add cookie to the order:", error);
       alert("Failed to add the cookie. Please try again.");
@@ -598,11 +600,13 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
                   console.log(e.target.selectedOptions[0].value);
                   console.log("Dropdown value:", e.target.value);
                   console.log("Parsed cookieId:", cookieId);
-                  if (!isNaN(cookieId)) {
+                  if (cookieId) {
                     const cookie = availableCookies.find((cookie) => cookie.id === cookieId);
+                    console.log("Cookie:", cookie);
                     setSelectedCookieToAdd(cookie);
+                    console.log("Selected cookie to add:", selectedCookieToAdd);
                   } else {
-                    setSelectedCookieToAdd(null);
+                    setSelectedCookieToAdd("poop");
                   }
                 }}
                 style={{ marginRight: "10px" }}
