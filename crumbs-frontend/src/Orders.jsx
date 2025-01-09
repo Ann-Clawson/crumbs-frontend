@@ -117,7 +117,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
         });
 
         setAvailableCookies(filteredAvailableCookies);
-        // console.log(availableCookies);
+        console.log("Available cookies:", availableCookies);
       } catch (error) {
         console.error("Failed to fetch available cookies or unexpected response:", error);
         alert("Unable to fetch available cookies. Please try again later.");
@@ -298,7 +298,7 @@ export function Orders({ orders, updateOrder, fetchUserInventory, inventory, rem
       const response = await axios.post(
         `http://localhost:5000/order_cookies/${selectedOrder.id}`,
         {
-          cookie_id: selectedCookieToAdd.cookie_id,
+          cookie_id: selectedCookieToAdd.id,
           quantity: 1, // default qty
         },
         { withCredentials: true }
